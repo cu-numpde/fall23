@@ -1,0 +1,120 @@
+@import url(https://fonts.googleapis.com/css?family=Lexend);
+
+.rendered_html :is(h1:first-child,h2:first-child,h3:first-child,h4:first-child,h5:first-child,h6:first-child) {
+    margin-top: 0em;
+}
+
+.rendered_html :is(h1,h2,h3,h4,h5,h6) {
+    margin-top: 0.5em;
+}
+
+.reveal :is(h2,h3,h4,h5,h6) {
+    font-family: 'Lato', sans-serif;
+}
+
+.reveal h1 {
+    font-family: 'Lexend', sans-serif; */
+    font-size: 200%;
+    padding-left: 1em;
+    text-indent: -1em;
+}
+
+.reveal :is(ol,dl,ul) {
+    margin-top: 0.25em;
+    margin-left: 0.25em;
+}
+
+.reveal :is(ol:not(.list-inline),dl:not(.list-inline),ul:not(.list-inline)) {
+    padding-left: 1em;
+}
+
+
+.rise-enabled .text_cell.rendered .rendered_html {
+    padding-left: 0.3em;
+    padding-right: 0.3em;
+    padding-top: 0.3em;
+    padding-bottom: 0.3em;
+}
+
+.reveal :is(h1, h2) {
+    color: #15317e;
+}
+
+.reveal :is(h3, h4) {
+    color: #c35817;
+}
+
+.reveal h2 {
+    font-size: 150%;
+}
+
+.reveal h3 {
+    font-size: 125%;
+}
+
+.reveal .bib h3 {
+    color: black;
+    font-weight: normal;
+}
+
+.reveal .bib {
+    font-style: italic;
+    font-size: smaller;
+}
+
+.reveal .caption h3 {
+    color: black;
+    font-weight: normal;
+}
+.reveal .caption {
+    font-style: italic;
+    font-size: smaller;
+}
+
+.reveal .floatleft {
+    float: left;
+    width: 47.5%;
+}
+.reveal .floatright {
+    float: right;
+    width: 47.5%;
+}
+
+.reveal .floatleft70 {
+    float: left;
+    width: 67.5%;
+}
+.reveal .floatright30 {
+    float: right;
+    width: 27.5%;
+}
+
+.reveal .center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.reveal .center p {
+    text-align: center;
+}
+
+.reveal .titleslide {
+    text-align: center;
+}
+
+.reveal .titleslide h1 {
+    font-size: 250%;
+}
+
+.reveal .smaller {
+    font-size: smaller;
+}
+
+.reveal .larger {
+    font-size: larger;
+}
+
+.rise-enabled .prompt {
+    min-width: 10ex;
+}

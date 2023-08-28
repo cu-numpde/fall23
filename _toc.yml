@@ -1,0 +1,45 @@
+# Table of contents
+# Learn more at https://jupyterbook.org/customize/toc.html
+
+format: jb-book
+root: index
+chapters:
+- file: syllabus
+- file: slides
+  sections:
+  - file: slides/2023-08-28-first-day.ipynb
+  - file: slides/2023-08-30-finite-differences.ipynb
+  - file: slides/2023-09-01-fd-solutions.ipynb
+  - file: slides/2023-09-06-fd-verification.ipynb
+  - file: slides/2023-09-08-fourier.ipynb
+  - file: slides/2023-09-11-chebyshev.ipynb
+  - file: slides/2023-09-13-coefficients.ipynb
+  - file: slides/2023-09-15-advection.ipynb
+  - file: slides/2023-09-18-sparsity.ipynb
+  - file: slides/2023-09-20-nonlinear.ipynb
+  - file: slides/2023-09-22-differentiation.ipynb
+  - file: slides/2023-09-25-blasius.ipynb
+  - file: slides/2023-09-27-transient.ipynb
+  - file: slides/2023-09-29-transient.ipynb
+  - file: slides/2023-10-02-stiffness.ipynb
+  - file: slides/2023-10-04-runge-kutta.ipynb
+  - file: slides/2023-10-06-2d.ipynb
+  - file: slides/2023-10-09-factorization.ipynb
+  - file: slides/2023-10-11-linear-solvers.ipynb
+  - file: slides/2023-10-13-iterative.ipynb
+  - file: slides/2023-10-16-krylov.ipynb
+  - file: slides/2023-10-18-preconditioning.ipynb
+  - file: slides/2023-10-20-multigrid.ipynb
+  - file: slides/2023-10-23-amg.ipynb
+  - file: slides/2023-10-25-galerkin.ipynb
+  - file: slides/2023-10-30-fem.ipynb
+  - file: slides/2023-11-01-fem.ipynb
+  - file: slides/2023-11-03-applied-fe.ipynb
+  - file: slides/2023-11-06-solids.ipynb
+  - file: slides/2023-11-08-ratel.ipynb
+  - file: slides/2023-11-10-solvers.ipynb
+  - file: slides/2023-11-13-fe-compressible.ipynb
+  - file: slides/2023-11-15-ceed-fluids.ipynb
+  - file: slides/2023-11-17-finite-volume.ipynb
+  - file: slides/2023-11-27-reconstruction.ipynb
+  - file: slides/2023-11-29-systems.ipynb
