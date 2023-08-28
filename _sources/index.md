@@ -6,7 +6,8 @@ Welcome to **CSCI-5636: Numerical Solution of Partial Differential Equations**
 * Meeting Time: MWF 1:25-2:15pm in ECCS 1B14
 * Office hours: [Choose a time](https://app.simplymeet.me/jed/numpde)
 * [Join in Zoom](https://cuboulder.zoom.us/j/92542412498)
-* [Canvas page](https://canvas.colorado.edu/courses/86159)
+* [Canvas page](https://canvas.colorado.edu/courses/98101)
+  * Please accept the Zulip invite on Canvas 
 :::
 
 % ::::{admonition} Activities
@@ -37,7 +38,7 @@ Welcome to **CSCI-5636: Numerical Solution of Partial Differential Equations**
 * Lecture series
   * [Bangerth, *Finite element methods in scientific computing course*](https://www.math.colostate.edu/~bangerth/videos.html) (focus on deal.II finite element library and C++)
 * Books
-  * [Driscoll and Braun, *Fundamentals of Numerical Computation*](https://fncbook.github.io/fnc/frontmatter.html) (free, in Julia with demo notebooks)
+  * [Driscoll and Braun, *Fundamentals of Numerical Computation*](https://tobydriscoll.net/fnc-julia/frontmatter.html) (free, in Julia)
   * [Myers, Van de Geijn, Van de Geijn, *Linear Algebra: Foundations to Frontiers*](http://www.ulaff.net/downloads.html) (free PDF and videos)
   * [LeVeque, *Finite Difference Methods for Ordinary and Partial Differential Equations*](https://faculty.washington.edu/rjl/fdmbook/) (CU students can [download free from SIAM](http://epubs.siam.org/doi/book/10.1137/1.9780898717839))
   * [LeVeque, *Finite Volume Methods for Hyperbolic Problems*](https://depts.washington.edu/clawpack/book.html) and the [Clawpack software](http://www.clawpack.org/).

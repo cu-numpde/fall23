@@ -18,6 +18,7 @@ Recordings will be available in Canvas Mediasite.
 ### Instructor: [Jed Brown](https://jedbrown.org), [`jed.brown@colorado.edu`](mailto:jed.brown@colorado.edu), ECOT 824
 
 * Office hours: [Choose a time](https://app.simplymeet.me/jed/numpde)
+* Please join Zulip (link on Canvas page)
 
 :::{tip}
 Chat sessions are important for asking questions, solving problems, discussion of broader academic and career strategy, and to provide feedback so I can make the class serve your needs and those of people with similar experiences and interests.
@@ -111,7 +112,9 @@ If you feel ill and think you might have COVID-19, if you have tested positive f
 
 ## Accommodation for Disabilities
 
-If you qualify for accommodations because of a disability, please submit your accommodation letter from Disability Services to your faculty member in a timely manner so that your needs can be addressed.  Disability Services determines accommodations based on documented disabilities in the academic environment.  Information on requesting accommodations is located on the Disability Services website. Contact Disability Services at 303-492-8671 or dsinfo@colorado.edu for further assistance.  If you have a temporary medical condition, see Temporary Medical Conditions on the Disability Services website.
+If you qualify for accommodations because of a disability, please submit your accommodation letter from Disability Services to your faculty member in a timely manner so that your needs can be addressed.  Disability Services determines accommodations based on documented disabilities in the academic environment.  Information on requesting accommodations is located on the Disability Services website. Contact Disability Services at 303-492-8671 or dsinfo@colorado.edu for further assistance.
+
+If you have a temporary medical condition or required medical isolation for which you require accommodation, let Jed know as soon as possible. Also see [Temporary Medical Conditions](https://www.colorado.edu/disabilityservices/students/temporary-medical-conditions) on the Disability Services website.
 
 ## Preferred Student Names and Pronouns
 
@@ -132,3 +135,9 @@ Please know that faculty and graduate instructors have a responsibility to infor
 Campus policy regarding religious observances requires that faculty make every effort to deal reasonably and fairly with all students who, because of religious obligations, have conflicts with scheduled exams, assignments or required attendance.  This class is flexible in many ways, but I would appreciate if you let me know of any conflicts.
 
 See the campus policy regarding religious observances for full details.
+
+## Mental Health and Wellness
+
+The University of Colorado Boulder is committed to the well-being of all students. If you are struggling with personal stressors, mental health or substance use concerns that are impacting academic or daily life, please contact [Counseling and Psychiatric Services (CAPS)](https://www.colorado.edu/counseling/) located in C4C or call (303) 492-2277, 24/7.
+
+Free and unlimited telehealth is also available through [Academic Live Care](https://www.colorado.edu/health/academiclivecare). The Academic Live Care site also provides information about additional wellness services on campus that are available to students.
