@@ -1,0 +1,1270 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>2023-08-30 Finite Differences &#8212; Numerical Solution of Partial Differential Equations</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'slides/2023-08-30-finite-differences';</script>
+    <link rel="shortcut icon" href="../_static/cu-numpde-square.svg"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="2023-09-01 FD Solutions" href="2023-09-01-fd-solutions.html" />
+    <link rel="prev" title="2023-08-28 First Day" href="2023-08-28-first-day.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/cu-numpde.svg" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="../_static/cu-numpde.svg" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    Welcome
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../syllabus.html">Syllabus</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../slides.html">Slides</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="2023-08-28-first-day.html">2023-08-28 First Day</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">2023-08-30 Finite Differences</a></li>
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-09-01-fd-solutions.html">2023-09-01 FD Solutions</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-09-06-fd-verification.html">2023-09-06 FD Verification</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-09-08-fourier.html">2023-09-08 Fourier and conditioning</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-09-11-chebyshev.html">2023-09-11 Chebyshev collocation</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-09-13-coefficients.html">2023-09-13 Variable coefficients</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-09-15-advection.html">2023-09-15 Advection</a></li>
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-09-18-sparsity.html">2023-09-18 Sparsity and solvers</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-09-20-nonlinear.html">2023-09-20 Nonlinear solvers</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-09-22-differentiation.html">2023-09-22 Differentiation</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-09-25-blasius.html">2023-09-25 Blasius</a></li>
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-09-27-transient.html">2023-09-27 Transient Intro</a></li>
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-09-29-transient.html">2023-09-29 Transient</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-10-02-stiffness.html">2023-10-02 Stiffness</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-10-04-runge-kutta.html">2023-10-04 Runge-Kutta</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-10-06-2d.html">2023-10-06 2D Advection-diffusion and waves</a></li>
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-10-09-factorization.html">2023-10-09 Factorization</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-10-11-linear-solvers.html">2023-10-11 Linear Solvers</a></li>
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-10-13-iterative.html">2023-10-13 Iterative Solvers</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-10-16-krylov.html">2023-10-16 Krylov and preconditioning</a></li>
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-10-18-preconditioning.html">2023-10-18 Preconditioning</a></li>
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-10-20-multigrid.html">2023-10-20 Multigrid</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-10-23-amg.html">2023-10-23 AMG</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-10-25-galerkin.html">2023-10-25 Galerkin methods</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-10-30-fem.html">2023-10-30 Finite Element Theory</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-11-01-fem.html">2023-11-01 Finite Elements</a></li>
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-11-03-applied-fe.html">2023-11-03 Applied Finite Elements</a></li>
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-11-06-solids.html">2023-11-06 Solid Mechanics</a></li>
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-11-08-ratel.html">2023-11-08 Ratel for Solid Mechanics</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-11-10-solvers.html">2023-11-10 Ratel Hands-on</a></li>
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-11-13-fe-compressible.html">2023-11-13 FE for Compressible flow</a></li>
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-11-15-ceed-fluids.html">2023-11-15 CEED Fluids</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-11-17-finite-volume.html">2023-11-17 Finite Volume</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-11-27-reconstruction.html">2023-11-27 Reconstruction</a></li>
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-11-29-systems.html">2023-11-29 Systems</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</ul>
+</li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li>
+<button onclick="initThebeSBT()"
+  class="btn btn-sm btn-launch-thebe dropdown-item"
+  title="Launch Thebe"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-play"></i>
+  </span>
+<span class="btn__text-container">Live Code</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/cu-numpde/fall22" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/cu-numpde/fall22/issues/new?title=Issue%20on%20page%20%2Fslides/2023-08-30-finite-differences.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/slides/2023-08-30-finite-differences.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>2023-08-30 Finite Differences</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">2023-08-30 Finite Differences</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#last-time">Last time</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#today">Today</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#examples-of-pde">Examples of PDE</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#choices-in-scoping-the-class">Choices in scoping the class</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#theory">Theory</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#applied">Applied</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#build-from-scratch">Build from scratch</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#build-using-libraries">Build using libraries</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#consider-the-boundary-value-problem-find-u">Consider the boundary value problem: find <span class="math notranslate nohighlight">\(u\)</span>:</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#finite-difference-collocation-approach-to-solve-u">Finite Difference/collocation approach to solve <span class="math notranslate nohighlight">\(u\)</span>:</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#computing-a-derivative">Computing a derivative</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#how-accurate-is-it">How accurate is it?</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#activity-on-stability-and-accuracy-computing-derivatives">Activity on stability and accuracy computing derivatives</a></li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="finite-differences">
+<h1>2023-08-30 Finite Differences<a class="headerlink" href="#finite-differences" title="Permalink to this heading">#</a></h1>
+<section id="last-time">
+<h2>Last time<a class="headerlink" href="#last-time" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p>General shape of PDE solvers and stakeholders</p></li>
+<li><p>Comparing/plotting cost and accuracy</p></li>
+<li><p>Learning strategy</p></li>
+</ul>
+</section>
+<section id="today">
+<h2>Today<a class="headerlink" href="#today" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Discussion and scoping</p></li>
+<li><p>Evaluating derivatives</p></li>
+<li><p>Taylor series and truncation error</p></li>
+<li><p>Stability</p></li>
+</ul>
+</section>
+<section id="examples-of-pde">
+<h2>Examples of PDE<a class="headerlink" href="#examples-of-pde" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Navier-Stokes (viscous fluids)</p>
+<ul>
+<li><p>nonlinear</p></li>
+<li><p>incompressible or compressible</p></li>
+</ul>
+</li>
+<li><p>Elasticity</p>
+<ul>
+<li><p>linear elasticity</p></li>
+<li><p>hyperelasticity (geometric nonlinear + material nonlinearity)</p></li>
+<li><p>time dependent (dynamics) or steady state</p></li>
+</ul>
+</li>
+<li><p>Hamilton-Jacobi-Bellman</p>
+<ul>
+<li><p>optimal control</p></li>
+</ul>
+</li>
+<li><p>Wave equations</p>
+<ul>
+<li><p>acoustics</p></li>
+<li><p>elasticity</p></li>
+<li><p>electromagnetics</p></li>
+<li><p>frequency domain</p></li>
+</ul>
+</li>
+</ul>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="choices-in-scoping-the-class">
+<h1>Choices in scoping the class<a class="headerlink" href="#choices-in-scoping-the-class" title="Permalink to this heading">#</a></h1>
+<section id="theory">
+<h2>Theory<a class="headerlink" href="#theory" title="Permalink to this heading">#</a></h2>
+<p>Analysis first, confirm using numerics.
+Limited to simpler models.</p>
+</section>
+<section id="applied">
+<h2>Applied<a class="headerlink" href="#applied" title="Permalink to this heading">#</a></h2>
+<p>Numerics first, pointers to useful theory.</p>
+</section>
+<hr class="docutils" />
+<section id="build-from-scratch">
+<h2>Build from scratch<a class="headerlink" href="#build-from-scratch" title="Permalink to this heading">#</a></h2>
+<p>Limited to simpler models, but you’ll understand everything under the hood.</p>
+</section>
+<section id="build-using-libraries">
+<h2>Build using libraries<a class="headerlink" href="#build-using-libraries" title="Permalink to this heading">#</a></h2>
+<p>More installation and software layers, but can solve more interesting problems.</p>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="consider-the-boundary-value-problem-find-u">
+<h1>Consider the boundary value problem: find <span class="math notranslate nohighlight">\(u\)</span>:<a class="headerlink" href="#consider-the-boundary-value-problem-find-u" title="Permalink to this heading">#</a></h1>
+<div class="amsmath math notranslate nohighlight" id="equation-83ff908c-d066-4857-b5c9-7ac825a444f3">
+<span class="eqno">(3)<a class="headerlink" href="#equation-83ff908c-d066-4857-b5c9-7ac825a444f3" title="Permalink to this equation">#</a></span>\[\begin{gather} -\frac{d^2 u}{dx^2} = f(x) \quad x \in \Omega = (-1,1) \\
+u(-1) = a \quad \frac{du}{dx}(1) = b .
+\end{gather}\]</div>
+<p>We say</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(f(x)\)</span> is the “forcing”</p></li>
+<li><p>the left boundary condition is Dirichlet</p></li>
+<li><p>the right boundary condition is Neumann</p></li>
+</ul>
+<p>We need to choose</p>
+<ul class="simple">
+<li><p>how to represent <span class="math notranslate nohighlight">\(u(x)\)</span>, including evaluating it on the boundary,</p></li>
+<li><p>how to compute derivatives of <span class="math notranslate nohighlight">\(u\)</span>,</p></li>
+<li><p>in what sense to ask for the differential equation to be satisfied,</p></li>
+<li><p>where to evaluate <span class="math notranslate nohighlight">\(f(x)\)</span> or integrals thereof,</p></li>
+<li><p>how to enforce boundary conditions.</p></li>
+</ul>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="finite-difference-collocation-approach-to-solve-u">
+<h1>Finite Difference/collocation approach to solve <span class="math notranslate nohighlight">\(u\)</span>:<a class="headerlink" href="#finite-difference-collocation-approach-to-solve-u" title="Permalink to this heading">#</a></h1>
+<div class="amsmath math notranslate nohighlight" id="equation-76775210-cb7e-43f6-970b-d26223133504">
+<span class="eqno">(4)<a class="headerlink" href="#equation-76775210-cb7e-43f6-970b-d26223133504" title="Permalink to this equation">#</a></span>\[\begin{gather} -\frac{d^2 u}{dx^2} = f(x) \quad x \in \Omega = (-1,1) \\
+u(-1) = a \quad \frac{du}{dx}(1) = b .
+\end{gather}\]</div>
+<ul class="simple">
+<li><p>Represent the function <span class="math notranslate nohighlight">\(u(x)\)</span> by its values <span class="math notranslate nohighlight">\(u_i = u(x_i)\)</span> at a discrete set of points <div class="math notranslate nohighlight">
+\[ -1 = x_1 &lt; x_2 &lt; \dotsb &lt; x_n = 1 . \]</div>
+</p>
+<ul>
+<li><p>The FD framework does not uniquely specify the solution values at other points</p></li>
+</ul>
+</li>
+<li><p>Compute derivatives at <span class="math notranslate nohighlight">\(x_i\)</span> via differencing formulas involving a finite number of neighbor points (independent of the total number of points <span class="math notranslate nohighlight">\(n\)</span>).</p></li>
+<li><p>FD methods ask for the differential equation to be satisfied pointwise at each <span class="math notranslate nohighlight">\(x_i\)</span> in the interior of the domain.</p></li>
+<li><p>Evaluate the forcing term <span class="math notranslate nohighlight">\(f\)</span> pointwise at <span class="math notranslate nohighlight">\(x_i\)</span>.</p></li>
+<li><p>Approximate derivatives at discrete boundary points (<span class="math notranslate nohighlight">\(x_n = 1\)</span> above), typically using one-sided differencing formulas.</p></li>
+</ul>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="computing-a-derivative">
+<h1>Computing a derivative<a class="headerlink" href="#computing-a-derivative" title="Permalink to this heading">#</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="n">Plots</span>
+<span class="n">default</span><span class="p">(</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+
+<span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">41</span>
+<span class="n">h</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">6</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span>
+<span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">LinRange</span><span class="p">(</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">)</span>
+<span class="n">u</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sin</span><span class="o">.</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">u</span><span class="p">,</span><span class="w"> </span><span class="n">marker</span><span class="o">=</span><span class="ss">:circle</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/310bedf1f37d44f9958f62058b92841a1e07829c5130fd4efacdcf2a7979167b.svg" src="../_images/310bedf1f37d44f9958f62058b92841a1e07829c5130fd4efacdcf2a7979167b.svg" /></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">u_x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cos</span><span class="o">.</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">fd_u_x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">u</span><span class="p">[</span><span class="mi">2</span><span class="o">:</span><span class="k">end</span><span class="p">]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">u</span><span class="p">[</span><span class="mi">1</span><span class="o">:</span><span class="k">end</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">h</span>
+
+<span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">u_x</span><span class="p">)</span>
+<span class="n">plot!</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="o">:</span><span class="k">end</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="w"> </span><span class="n">fd_u_x</span><span class="p">,</span><span class="w"> </span><span class="n">marker</span><span class="o">=</span><span class="ss">:circle</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/af5cc42ec39fdbd2839ede64b1e7fabe174aca1b5bb183e40353747205449393.svg" src="../_images/af5cc42ec39fdbd2839ede64b1e7fabe174aca1b5bb183e40353747205449393.svg" /></div>
+</div>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="how-accurate-is-it">
+<h1>How accurate is it?<a class="headerlink" href="#how-accurate-is-it" title="Permalink to this heading">#</a></h1>
+<p>Without loss of generality, we’ll approximate <span class="math notranslate nohighlight">\(u'(x_i = 0)\)</span>, taking <span class="math notranslate nohighlight">\(h = x_{i+1} - x_i\)</span>.</p>
+<div class="math notranslate nohighlight">
+\[ u(x) = u(0) + u'(0)x + u''(0)x^2/2! + O(x^3)\]</div>
+<p>and substitute into the differencing formula
+<div class="math notranslate nohighlight">
+\[\begin{split} \begin{split} u'(0) \approx \frac{u(h) - u(0)}{h} = h^{-1} \Big( u(0) + u'(0) h + u''(0)h^2/2 + O(h^3) - u(0) \Big) \\
+= u'(0) + u''(0)h/2 + O(h^2) . \end{split}\end{split}\]</div>
+
+Evidently the error in this approximation is <span class="math notranslate nohighlight">\(u''(0)h/2 + O(h^2)\)</span>. We say this method is <em>first order accurate</em>.</p>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="activity-on-stability-and-accuracy-computing-derivatives">
+<h1>Activity on stability and accuracy computing derivatives<a class="headerlink" href="#activity-on-stability-and-accuracy-computing-derivatives" title="Permalink to this heading">#</a></h1>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "cu-numpde/fall22",
+            ref: "main",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "julia-1.9"
+        },
+        kernelOptions: {
+            name: "julia-1.9",
+            path: "./slides"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'julia-1.9'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="2023-08-28-first-day.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">2023-08-28 First Day</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="2023-09-01-fd-solutions.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">2023-09-01 FD Solutions</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">2023-08-30 Finite Differences</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#last-time">Last time</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#today">Today</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#examples-of-pde">Examples of PDE</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#choices-in-scoping-the-class">Choices in scoping the class</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#theory">Theory</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#applied">Applied</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#build-from-scratch">Build from scratch</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#build-using-libraries">Build using libraries</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#consider-the-boundary-value-problem-find-u">Consider the boundary value problem: find <span class="math notranslate nohighlight">\(u\)</span>:</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#finite-difference-collocation-approach-to-solve-u">Finite Difference/collocation approach to solve <span class="math notranslate nohighlight">\(u\)</span>:</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#computing-a-derivative">Computing a derivative</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#how-accurate-is-it">How accurate is it?</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#activity-on-stability-and-accuracy-computing-derivatives">Activity on stability and accuracy computing derivatives</a></li>
+</ul>
+
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Jed Brown
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

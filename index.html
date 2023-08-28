@@ -1,0 +1,1085 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Welcome &#8212; Numerical Solution of Partial Differential Equations</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'index';</script>
+    <link rel="shortcut icon" href="_static/cu-numpde-square.svg"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Syllabus" href="syllabus.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="#">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/cu-numpde.svg" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="_static/cu-numpde.svg" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1 current active">
+                <a class="reference internal" href="#">
+                    Welcome
+                </a>
+            </li>
+        </ul>
+        <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="syllabus.html">Syllabus</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="slides.html">Slides</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="slides/2023-08-28-first-day.html">2023-08-28 First Day</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="slides/2023-08-30-finite-differences.html">2023-08-30 Finite Differences</a></li>
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="slides/2023-09-01-fd-solutions.html">2023-09-01 FD Solutions</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="slides/2023-09-06-fd-verification.html">2023-09-06 FD Verification</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="slides/2023-09-08-fourier.html">2023-09-08 Fourier and conditioning</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="slides/2023-09-11-chebyshev.html">2023-09-11 Chebyshev collocation</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="slides/2023-09-13-coefficients.html">2023-09-13 Variable coefficients</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="slides/2023-09-15-advection.html">2023-09-15 Advection</a></li>
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="slides/2023-09-18-sparsity.html">2023-09-18 Sparsity and solvers</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="slides/2023-09-20-nonlinear.html">2023-09-20 Nonlinear solvers</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="slides/2023-09-22-differentiation.html">2023-09-22 Differentiation</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="slides/2023-09-25-blasius.html">2023-09-25 Blasius</a></li>
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="slides/2023-09-27-transient.html">2023-09-27 Transient Intro</a></li>
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="slides/2023-09-29-transient.html">2023-09-29 Transient</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="slides/2023-10-02-stiffness.html">2023-10-02 Stiffness</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="slides/2023-10-04-runge-kutta.html">2023-10-04 Runge-Kutta</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="slides/2023-10-06-2d.html">2023-10-06 2D Advection-diffusion and waves</a></li>
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="slides/2023-10-09-factorization.html">2023-10-09 Factorization</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="slides/2023-10-11-linear-solvers.html">2023-10-11 Linear Solvers</a></li>
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="slides/2023-10-13-iterative.html">2023-10-13 Iterative Solvers</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="slides/2023-10-16-krylov.html">2023-10-16 Krylov and preconditioning</a></li>
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="slides/2023-10-18-preconditioning.html">2023-10-18 Preconditioning</a></li>
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="slides/2023-10-20-multigrid.html">2023-10-20 Multigrid</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="slides/2023-10-23-amg.html">2023-10-23 AMG</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="slides/2023-10-25-galerkin.html">2023-10-25 Galerkin methods</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="slides/2023-10-30-fem.html">2023-10-30 Finite Element Theory</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="slides/2023-11-01-fem.html">2023-11-01 Finite Elements</a></li>
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="slides/2023-11-03-applied-fe.html">2023-11-03 Applied Finite Elements</a></li>
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="slides/2023-11-06-solids.html">2023-11-06 Solid Mechanics</a></li>
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="slides/2023-11-08-ratel.html">2023-11-08 Ratel for Solid Mechanics</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="slides/2023-11-10-solvers.html">2023-11-10 Ratel Hands-on</a></li>
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="slides/2023-11-13-fe-compressible.html">2023-11-13 FE for Compressible flow</a></li>
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="slides/2023-11-15-ceed-fluids.html">2023-11-15 CEED Fluids</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="slides/2023-11-17-finite-volume.html">2023-11-17 Finite Volume</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="slides/2023-11-27-reconstruction.html">2023-11-27 Reconstruction</a></li>
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="slides/2023-11-29-systems.html">2023-11-29 Systems</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</ul>
+</li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/cu-numpde/fall22" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/cu-numpde/fall22/issues/new?title=Issue%20on%20page%20%2Findex.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/index.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Welcome</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="welcome">
+<h1>Welcome<a class="headerlink" href="#welcome" title="Permalink to this heading">#</a></h1>
+<p>Welcome to <strong>CSCI-5636: Numerical Solution of Partial Differential Equations</strong></p>
+<div class="admonition-logistics admonition">
+<p class="admonition-title">Logistics</p>
+<ul class="simple">
+<li><p>Meeting Time: MWF 11:15-12:05 in ECCS 1B14</p></li>
+<li><p>Office hours: <a class="reference external" href="https://app.simplymeet.me/jed/numpde">Choose a time</a></p></li>
+<li><p><a class="reference external" href="https://cuboulder.zoom.us/j/92542412498">Join in Zoom</a></p></li>
+<li><p><a class="reference external" href="https://canvas.colorado.edu/courses/86159">Canvas page</a></p></li>
+</ul>
+</div>
+<div class="admonition-activities admonition">
+<p class="admonition-title">Activities</p>
+<table class="table">
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 70%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Objectives</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference external" href="https://classroom.github.com/a/8I4O5IcG">2022-08-24-derivatives</a></p></td>
+<td><p>Use GitHub classroom and observe two kinds of numerical error: rounding error and discretization (aka. truncation) error.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://classroom.github.com/a/RBCyaHyy">2022-09-19-blasius</a></p></td>
+<td><p>Solve a nonlinear PDE using spectral methods. Learn libraries and assess accuracy.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://classroom.github.com/a/3AzfU4zn">Community project</a></p></td>
+<td><p>This has three parts: community presentation, contribution, and
+retrospective presentation about the contribution experience. The goal is to
+build a deeper understanding of how open source communities function, what
+metrics and implicit criteria are valued, and the design decisions and norms
+that went into making libraries and applications successful. In the first stage,
+you’ ll survey the community, and in the second, you’ll gain experience making a
+specific contribution of your choosing.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="admonition-resources admonition">
+<p class="admonition-title">Resources</p>
+<ul class="simple">
+<li><p><a class="reference external" href="http://www.siam.org/students/memberships.php">SIAM Membership</a> is free for CU students (30% discount on SIAM books)</p></li>
+<li><p>Lecture series</p>
+<ul>
+<li><p><a class="reference external" href="https://www.math.colostate.edu/~bangerth/videos.html">Bangerth, <em>Finite element methods in scientific computing course</em></a> (focus on deal.II finite element library and C++)</p></li>
+</ul>
+</li>
+<li><p>Books</p>
+<ul>
+<li><p><a class="reference external" href="https://fncbook.github.io/fnc/frontmatter.html">Driscoll and Braun, <em>Fundamentals of Numerical Computation</em></a> (free, in Julia with demo notebooks)</p></li>
+<li><p><a class="reference external" href="http://www.ulaff.net/downloads.html">Myers, Van de Geijn, Van de Geijn, <em>Linear Algebra: Foundations to Frontiers</em></a> (free PDF and videos)</p></li>
+<li><p><a class="reference external" href="https://faculty.washington.edu/rjl/fdmbook/">LeVeque, <em>Finite Difference Methods for Ordinary and Partial Differential Equations</em></a> (CU students can <a class="reference external" href="http://epubs.siam.org/doi/book/10.1137/1.9780898717839">download free from SIAM</a>)</p></li>
+<li><p><a class="reference external" href="https://depts.washington.edu/clawpack/book.html">LeVeque, <em>Finite Volume Methods for Hyperbolic Problems</em></a> and the <a class="reference external" href="http://www.clawpack.org/">Clawpack software</a>.</p></li>
+<li><p><a class="reference external" href="https://link.springer.com/book/10.1007%2Fb79761#toc">Toro, <em>Riemann Solvers and Numerical Methods for Fluid Dynamics</em></a>. (CU students can download free)</p></li>
+<li><p><a class="reference external" href="https://link.springer.com/book/10.1007%2F978-3-642-23099-8">Logg, Mardal, Wells, <em>Automated Solution of Differential Equations by the Finite Element Method (The FEniCS Book)</em></a>. (<a class="reference external" href="https://fenicsproject.org/book/">free download</a>)</p></li>
+<li><p><a class="reference external" href="https://people.maths.ox.ac.uk/trefethen/spectral.html">Trefethen, <em>Spectral Methods in MATLAB</em></a>. (CU students can <a class="reference external" href="http://epubs.siam.org/doi/book/10.1137/1.9780898719598">download free from SIAM</a>)</p></li>
+<li><p><a class="reference external" href="https://doi.org/10.1093/acprof:oso/9780199678792.001.0001">Elman, Silvester, Wathen, <em>Finite Elements and Fast Iterative Solvers with Applications in Incompressible Fluid Dynamics</em></a> (CU students <a class="reference external" href="http://libraries.colorado.edu/record=b7826912~S3">click “Full Text” to read online</a>)</p></li>
+</ul>
+</li>
+<li><p>Papers</p>
+<ul>
+<li><p><a class="reference external" href="https://doi.org/10.1115/1.1436090">Roache, <em>Code Verification by the Method of Manufactured Solutions</em></a></p></li>
+<li><p><a class="reference external" href="https://dl.acm.org/doi/10.1145/2484762.2484782">Turk, <em>Scaling a code in the human dimension</em></a> <a class="reference external" href="https://arxiv.org/pdf/1301.7064.pdf">arXiv</a></p></li>
+<li><p>Nachtigal, Reddy, Trefethen, <a class="reference download internal" download="" href="_downloads/724a644af751de859b23a0e3e8cfcebe/NachtigalReddyTrefethen-HowFastAreNonsymmetricMatrixIterations-1992.pdf"><code class="xref download docutils literal notranslate"><span class="pre">How</span> <span class="pre">fast</span> <span class="pre">are</span> <span class="pre">nonsymmetric</span> <span class="pre">matrix</span> <span class="pre">iterations</span></code></a></p></li>
+<li><p>Greenbaum, Pták, Strakoš, <a class="reference download internal" download="" href="_downloads/89519b904a425b8eb17694760fabba14/GreenbaumPtakStrakos-AnyNonincreasingConvergenceCurvePossibleGMRES-1996.pdf"><code class="xref download docutils literal notranslate"><span class="pre">Any</span> <span class="pre">nonincreasing</span> <span class="pre">convergence</span> <span class="pre">curve</span> <span class="pre">is</span> <span class="pre">possible</span> <span class="pre">for</span> <span class="pre">GMRES</span></code></a></p></li>
+<li><p>Embree, <a class="reference download internal" download="" href="_downloads/877dfa29a1daedd00447fda3e7eb206d/Embree-TheTortoiseAndTheHareRestartGMRES-2003.pdf"><code class="xref download docutils literal notranslate"><span class="pre">The</span> <span class="pre">tortoise</span> <span class="pre">and</span> <span class="pre">the</span> <span class="pre">hare</span> <span class="pre">restart</span> <span class="pre">GMRES</span></code></a></p></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "cu-numpde/fall22",
+            ref: "main",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="right-next"
+       href="syllabus.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Syllabus</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Jed Brown
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

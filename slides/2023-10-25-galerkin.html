@@ -1,0 +1,1746 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>2023-10-25 Galerkin methods &#8212; Numerical Solution of Partial Differential Equations</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'slides/2023-10-25-galerkin';</script>
+    <link rel="shortcut icon" href="../_static/cu-numpde-square.svg"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="2023-10-30 Finite Element Theory" href="2023-10-30-fem.html" />
+    <link rel="prev" title="2023-10-23 AMG" href="2023-10-23-amg.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/cu-numpde.svg" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="../_static/cu-numpde.svg" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    Welcome
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../syllabus.html">Syllabus</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../slides.html">Slides</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="2023-08-28-first-day.html">2023-08-28 First Day</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-08-30-finite-differences.html">2023-08-30 Finite Differences</a></li>
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-09-01-fd-solutions.html">2023-09-01 FD Solutions</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-09-06-fd-verification.html">2023-09-06 FD Verification</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-09-08-fourier.html">2023-09-08 Fourier and conditioning</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-09-11-chebyshev.html">2023-09-11 Chebyshev collocation</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-09-13-coefficients.html">2023-09-13 Variable coefficients</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-09-15-advection.html">2023-09-15 Advection</a></li>
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-09-18-sparsity.html">2023-09-18 Sparsity and solvers</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-09-20-nonlinear.html">2023-09-20 Nonlinear solvers</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-09-22-differentiation.html">2023-09-22 Differentiation</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-09-25-blasius.html">2023-09-25 Blasius</a></li>
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-09-27-transient.html">2023-09-27 Transient Intro</a></li>
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-09-29-transient.html">2023-09-29 Transient</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-10-02-stiffness.html">2023-10-02 Stiffness</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-10-04-runge-kutta.html">2023-10-04 Runge-Kutta</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-10-06-2d.html">2023-10-06 2D Advection-diffusion and waves</a></li>
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-10-09-factorization.html">2023-10-09 Factorization</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-10-11-linear-solvers.html">2023-10-11 Linear Solvers</a></li>
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-10-13-iterative.html">2023-10-13 Iterative Solvers</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-10-16-krylov.html">2023-10-16 Krylov and preconditioning</a></li>
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-10-18-preconditioning.html">2023-10-18 Preconditioning</a></li>
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-10-20-multigrid.html">2023-10-20 Multigrid</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-10-23-amg.html">2023-10-23 AMG</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">2023-10-25 Galerkin methods</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-10-30-fem.html">2023-10-30 Finite Element Theory</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-11-01-fem.html">2023-11-01 Finite Elements</a></li>
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-11-03-applied-fe.html">2023-11-03 Applied Finite Elements</a></li>
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-11-06-solids.html">2023-11-06 Solid Mechanics</a></li>
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-11-08-ratel.html">2023-11-08 Ratel for Solid Mechanics</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-11-10-solvers.html">2023-11-10 Ratel Hands-on</a></li>
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-11-13-fe-compressible.html">2023-11-13 FE for Compressible flow</a></li>
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-11-15-ceed-fluids.html">2023-11-15 CEED Fluids</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-11-17-finite-volume.html">2023-11-17 Finite Volume</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-11-27-reconstruction.html">2023-11-27 Reconstruction</a></li>
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-11-29-systems.html">2023-11-29 Systems</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</ul>
+</li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li>
+<button onclick="initThebeSBT()"
+  class="btn btn-sm btn-launch-thebe dropdown-item"
+  title="Launch Thebe"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-play"></i>
+  </span>
+<span class="btn__text-container">Live Code</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/cu-numpde/fall22" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/cu-numpde/fall22/issues/new?title=Issue%20on%20page%20%2Fslides/2023-10-25-galerkin.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/slides/2023-10-25-galerkin.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>2023-10-25 Galerkin methods</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">2023-10-25 Galerkin methods</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#last-time">Last time</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#today">Today</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#searching-for-projects">Searching for projects</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#github-codesearch">GitHub codesearch</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#journals">Journals</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#journal-of-open-source-software">Journal of Open Source Software</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#geoscientific-model-development">Geoscientific Model Development</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#integration-by-parts">Integration by parts</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#one-dimension">One dimension</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#multiple-dimensions">Multiple dimensions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#strong-form">Strong form</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#weak-form">Weak form</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#variational-from-minimization-to-weak-forms">Variational: from minimization to weak forms</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#minimization">Minimization</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#variations">Variations</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#finite-elements">Finite elements</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-statement">Problem statement</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#what-do-we-need">What do we need?</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ciarlet-1978-definition">Ciarlet (1978) definition</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#first-choose-a-single-element-k-omega">First: choose a single element <span class="math notranslate nohighlight">\(K = \Omega\)</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#quadrature">Quadrature</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#integration-via-polynomial-interpolation">Integration via polynomial interpolation</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-order-of-accuracy-can-we-expect">What order of accuracy can we expect?</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#doing-better-gauss-quadrature">Doing better: Gauss quadrature</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#gauss-legendre-in-code">Gauss-Legendre in code</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#legendre-polynomials">Legendre polynomials</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#prime-to-nodal-basis">Prime to nodal basis</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#galerkin-method-l-2-projection">Galerkin method: <span class="math notranslate nohighlight">\(L^2\)</span> projection</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#embed-the-solution-in-the-continuous-space">Embed the solution in the continuous space</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#galerkin-error-estimates">Galerkin error estimates</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#galerkin-optimality-via-energy-norms">Galerkin optimality via energy norms</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#observations">Observations</a></li>
+</ul>
+</li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="galerkin-methods">
+<h1>2023-10-25 Galerkin methods<a class="headerlink" href="#galerkin-methods" title="Permalink to this heading">#</a></h1>
+<section id="last-time">
+<h2>Last time<a class="headerlink" href="#last-time" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Algebraic multigrid</p></li>
+<li><p>Smoothed aggregation</p></li>
+<li><p>Multigrid in PETSc</p></li>
+<li><p>Projects</p></li>
+</ul>
+</section>
+<section id="today">
+<h2>Today<a class="headerlink" href="#today" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Questions about projects</p></li>
+<li><p>Galerkin methods</p>
+<ul>
+<li><p>Weak forms</p></li>
+<li><p><span class="math notranslate nohighlight">\(L^2\)</span> Projection</p></li>
+<li><p>Galerkin “optimality”</p></li>
+</ul>
+</li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="n">Plots</span>
+<span class="n">default</span><span class="p">(</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="k">using</span><span class="w"> </span><span class="n">LinearAlgebra</span>
+<span class="k">using</span><span class="w"> </span><span class="n">SparseArrays</span>
+
+<span class="k">function</span><span class="w"> </span><span class="n">my_spy</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+<span class="w">    </span><span class="n">cmax</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">norm</span><span class="p">(</span><span class="n">vec</span><span class="p">(</span><span class="n">A</span><span class="p">),</span><span class="w"> </span><span class="nb">Inf</span><span class="p">)</span>
+<span class="w">    </span><span class="n">s</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">ceil</span><span class="p">(</span><span class="mi">120</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">size</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)))</span>
+<span class="w">    </span><span class="n">spy</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="w"> </span><span class="n">marker</span><span class="o">=</span><span class="p">(</span><span class="ss">:square</span><span class="p">,</span><span class="w"> </span><span class="n">s</span><span class="p">),</span><span class="w"> </span><span class="n">c</span><span class="o">=</span><span class="ss">:diverging_rainbow_bgymr_45_85_c67_n256</span><span class="p">,</span><span class="w"> </span><span class="n">clims</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="n">cmax</span><span class="p">,</span><span class="w"> </span><span class="n">cmax</span><span class="p">))</span>
+<span class="k">end</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>my_spy (generic function with 1 method)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="searching-for-projects">
+<h1>Searching for projects<a class="headerlink" href="#searching-for-projects" title="Permalink to this heading">#</a></h1>
+<section id="github-codesearch">
+<h2><a class="reference external" href="https://github.com/search">GitHub codesearch</a><a class="headerlink" href="#github-codesearch" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Check Insights -&gt; Contributors</p>
+<ul>
+<li><p>Sustained versus short-term activity</p></li>
+<li><p>Number of stakeholders</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">shortlog</span> <span class="pre">-se</span> <span class="pre">--since=2016</span> <span class="pre">|</span> <span class="pre">sort</span> <span class="pre">-n</span></code></p></li>
+</ul>
+</li>
+<li><p>Community signals</p>
+<ul>
+<li><p>Code of Conduct</p></li>
+<li><p>Contributing guidelines, pull request templates</p></li>
+<li><p>Active review and mentoring in pull requests</p></li>
+</ul>
+</li>
+<li><p>Continuous integration</p>
+<ul>
+<li><p>Actions tab, also report in pull requests</p></li>
+<li><p>Pipelines for repositories on GitLab</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="journals">
+<h2>Journals<a class="headerlink" href="#journals" title="Permalink to this heading">#</a></h2>
+<section id="journal-of-open-source-software">
+<h3><a class="reference external" href="https://joss.theoj.org/papers">Journal of Open Source Software</a><a class="headerlink" href="#journal-of-open-source-software" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Papers on mature software with many users</p></li>
+<li><p>Immature research software with a few users, but best practices and intent to grow</p></li>
+</ul>
+</section>
+<section id="geoscientific-model-development">
+<h3><a class="reference external" href="https://geoscientific-model-development.net/">Geoscientific Model Development</a><a class="headerlink" href="#geoscientific-model-development" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Blends software and methods work</p></li>
+</ul>
+</section>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="integration-by-parts">
+<h1>Integration by parts<a class="headerlink" href="#integration-by-parts" title="Permalink to this heading">#</a></h1>
+<section id="one-dimension">
+<h2>One dimension<a class="headerlink" href="#one-dimension" title="Permalink to this heading">#</a></h2>
+<blockquote>
+<div><p>it’s the product rule backwards</p>
+</div></blockquote>
+<div class="amsmath math notranslate nohighlight" id="equation-85e2f2ef-f0f1-4716-90f9-e8fff4ec3b93">
+<span class="eqno">(42)<a class="headerlink" href="#equation-85e2f2ef-f0f1-4716-90f9-e8fff4ec3b93" title="Permalink to this equation">#</a></span>\[\begin{align} \int_a^b d(uv) &amp;= \int_a^b u dv + \int_a^b v du \\
+(uv)_a^b &amp;= \int_a^b u dv + \int_a^b v du \\
+\int_a^b u dv &amp;= (uv)_a^b - \int_a^b v du
+\end{align}\]</div>
+<blockquote>
+<div><p>you can move the derivative to the other term; it’ll cost you a minus sign and a boundary term</p>
+</div></blockquote>
+</section>
+<section id="multiple-dimensions">
+<h2>Multiple dimensions<a class="headerlink" href="#multiple-dimensions" title="Permalink to this heading">#</a></h2>
+<div class="amsmath math notranslate nohighlight" id="equation-9f7ab233-3123-4d49-a9cd-43fd0d055ac4">
+<span class="eqno">(43)<a class="headerlink" href="#equation-9f7ab233-3123-4d49-a9cd-43fd0d055ac4" title="Permalink to this equation">#</a></span>\[\begin{align}
+\int_\Omega v \nabla\cdot \mathbf f = -\int_\Omega \nabla v \cdot \mathbf f + \int_{\partial \Omega} v \mathbf f \cdot \mathbf n
+\end{align}\]</div>
+</section>
+<section id="strong-form">
+<h2>Strong form<a class="headerlink" href="#strong-form" title="Permalink to this heading">#</a></h2>
+<div class="math notranslate nohighlight">
+\[ -\nabla\cdot(\kappa \nabla u) = 0 \]</div>
+</section>
+<section id="weak-form">
+<h2>Weak form<a class="headerlink" href="#weak-form" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p>multiply by a test function and integrate by parts</p></li>
+</ul>
+<div class="amsmath math notranslate nohighlight" id="equation-120ccc1e-82c7-4f10-9e95-62cb52567fba">
+<span class="eqno">(44)<a class="headerlink" href="#equation-120ccc1e-82c7-4f10-9e95-62cb52567fba" title="Permalink to this equation">#</a></span>\[\begin{align} -\int_\Omega v \nabla\cdot(\kappa \nabla u) = 0, \forall v \\
+\int_\Omega \nabla v \cdot \kappa \nabla u - \int_{\partial\Omega} v \underbrace{\kappa \nabla u \cdot \mathbf n}_{\text{boundary condition}} = 0
+\end{align}\]</div>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="variational-from-minimization-to-weak-forms">
+<h1>Variational: from minimization to weak forms<a class="headerlink" href="#variational-from-minimization-to-weak-forms" title="Permalink to this heading">#</a></h1>
+<section id="minimization">
+<h2>Minimization<a class="headerlink" href="#minimization" title="Permalink to this heading">#</a></h2>
+<p>Find <span class="math notranslate nohighlight">\(u\in \mathcal V\)</span> such that</p>
+<div class="amsmath math notranslate nohighlight" id="equation-52bad964-e83c-4dc0-bfda-f9d130d3e796">
+<span class="eqno">(45)<a class="headerlink" href="#equation-52bad964-e83c-4dc0-bfda-f9d130d3e796" title="Permalink to this equation">#</a></span>\[\begin{align}
+u &amp;= \arg\min \int_\Omega \frac 1 p \lVert \nabla u \rVert^p \\
+&amp;= \arg\min \int_\Omega \frac 1 p (\nabla u \cdot \nabla u)^{p/2}
+\end{align}\]</div>
+</section>
+<section id="variations">
+<h2>Variations<a class="headerlink" href="#variations" title="Permalink to this heading">#</a></h2>
+<blockquote>
+<div><p>If <span class="math notranslate nohighlight">\(f(x)\)</span> is a minimum, then <span class="math notranslate nohighlight">\(df = f'(x) dx = 0\)</span> for all <span class="math notranslate nohighlight">\(dx\)</span>.</p>
+</div></blockquote>
+<p>So if <span class="math notranslate nohighlight">\(u \in \mathcal V\)</span> is a minimizer, then</p>
+<div class="amsmath math notranslate nohighlight" id="equation-4dacf453-5ed1-4cbd-b473-2aac1911722e">
+<span class="eqno">(46)<a class="headerlink" href="#equation-4dacf453-5ed1-4cbd-b473-2aac1911722e" title="Permalink to this equation">#</a></span>\[\begin{align}
+\int_\Omega \underbrace{\lVert \nabla u \rVert^{p-2}}_{\kappa(u)} \nabla u \cdot \nabla du = 0
+\end{align}\]</div>
+<p>for all <span class="math notranslate nohighlight">\(du \in \mathcal V\)</span>.</p>
+<ul class="simple">
+<li><p>It’s common to use <span class="math notranslate nohighlight">\(v\)</span> in place of <span class="math notranslate nohighlight">\(du\)</span>.</p></li>
+<li><p>Our discretization will reflect this structure</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[ v_h^T F(u_h) \sim \int_\Omega \nabla v \cdot \kappa(u) \cdot \nabla u \]</div>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="finite-elements">
+<h1>Finite elements<a class="headerlink" href="#finite-elements" title="Permalink to this heading">#</a></h1>
+<section id="problem-statement">
+<h2>Problem statement<a class="headerlink" href="#problem-statement" title="Permalink to this heading">#</a></h2>
+<p>Find <span class="math notranslate nohighlight">\(u \in \mathcal V\)</span> such that</p>
+<div class="amsmath math notranslate nohighlight" id="equation-59ea61b3-b5ac-4cc3-bbe6-89b3a1d73b5f">
+<span class="eqno">(47)<a class="headerlink" href="#equation-59ea61b3-b5ac-4cc3-bbe6-89b3a1d73b5f" title="Permalink to this equation">#</a></span>\[\begin{align} \int_\Omega \nabla v \cdot \kappa \nabla u - \int_{\partial\Omega} v \underbrace{\kappa \nabla u \cdot \mathbf n}_{\text{boundary condition}} = 0, \forall v \in \mathcal V
+\end{align}\]</div>
+<section id="what-do-we-need">
+<h3>What do we need?<a class="headerlink" href="#what-do-we-need" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p>A way to integrate</p></li>
+<li><p>A space <span class="math notranslate nohighlight">\(\mathcal V\)</span></p></li>
+<li><p>Boundary conditions</p></li>
+</ul>
+</section>
+</section>
+<section id="ciarlet-1978-definition">
+<h2>Ciarlet (1978) definition<a class="headerlink" href="#ciarlet-1978-definition" title="Permalink to this heading">#</a></h2>
+<p>A <strong>finite element</strong> is a triple <span class="math notranslate nohighlight">\((K, P, N)\)</span> where</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(K\)</span> is a bounded domain with piecewise smooth boundary</p></li>
+<li><p><span class="math notranslate nohighlight">\(P = \{p_j\}_1^k\)</span> is a finite-dimensional function space over <span class="math notranslate nohighlight">\(K\)</span> (“prime basis”)</p></li>
+<li><p><span class="math notranslate nohighlight">\(N = \{n_i\}_1^k\)</span> is a basis for the dual space (“nodes”)</p></li>
+</ul>
+<p>It is common for nodes to be pointwise evaluation
+<div class="math notranslate nohighlight">
+\[ \langle n_i, p_j \rangle = p_j(x_i) \]</div>
+</p>
+<section id="first-choose-a-single-element-k-omega">
+<h3>First: choose a single element <span class="math notranslate nohighlight">\(K = \Omega\)</span><a class="headerlink" href="#first-choose-a-single-element-k-omega" title="Permalink to this heading">#</a></h3>
+</section>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="quadrature">
+<h1>Quadrature<a class="headerlink" href="#quadrature" title="Permalink to this heading">#</a></h1>
+<p>Our elements will be a line segment and we’ll define quadrature on the standard line segment, <span class="math notranslate nohighlight">\(\hat K = (-1, 1)\)</span>. A quadrature is a set of points <span class="math notranslate nohighlight">\(q_i\)</span> and weights <span class="math notranslate nohighlight">\(w_i\)</span> such that
+<div class="math notranslate nohighlight">
+\[ \int_{-1}^1 f(x) \approx \sum_{i=1}^n w_i f(q_i) \]</div>
+</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">default</span><span class="p">(</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<span class="k">function</span><span class="w"> </span><span class="n">quad_trapezoid</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="w">    </span><span class="n">q</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">LinRange</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">)</span>
+<span class="w">    </span><span class="n">w</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">ones</span><span class="p">(</span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span>
+<span class="w">    </span><span class="n">w</span><span class="p">[[</span><span class="mi">1</span><span class="p">,</span><span class="k">end</span><span class="p">]]</span><span class="w"> </span><span class="o">./=</span><span class="w"> </span><span class="mi">2</span>
+<span class="w">    </span><span class="n">q</span><span class="p">,</span><span class="w"> </span><span class="n">w</span>
+<span class="k">end</span>
+
+<span class="k">function</span><span class="w"> </span><span class="n">plot_quad_accuracy</span><span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="w"> </span><span class="n">F</span><span class="p">,</span><span class="w"> </span><span class="n">quad</span><span class="p">)</span>
+<span class="w">    </span><span class="n">ns</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">.^</span><span class="w"> </span><span class="p">(</span><span class="mi">2</span><span class="o">:</span><span class="mi">7</span><span class="p">)</span>
+<span class="w">    </span><span class="n">exact</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">F</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">F</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+<span class="w">    </span><span class="k">function</span><span class="w"> </span><span class="n">err</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="w">        </span><span class="n">q</span><span class="p">,</span><span class="w"> </span><span class="n">w</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">quad</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="w">        </span><span class="n">w</span><span class="o">&#39;</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">f</span><span class="o">.</span><span class="p">(</span><span class="n">q</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">exact</span>
+<span class="w">    </span><span class="k">end</span>
+<span class="w">    </span><span class="n">errors</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">abs</span><span class="o">.</span><span class="p">(</span><span class="n">err</span><span class="p">(</span><span class="n">n</span><span class="p">))</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">ns</span><span class="p">]</span>
+<span class="w">    </span><span class="n">plot</span><span class="p">(</span><span class="n">ns</span><span class="p">,</span><span class="w"> </span><span class="n">errors</span><span class="p">,</span><span class="w"> </span><span class="n">marker</span><span class="o">=</span><span class="ss">:auto</span><span class="p">,</span><span class="w"> </span><span class="n">label</span><span class="o">=</span><span class="n">quad</span><span class="p">)</span>
+<span class="w">    </span><span class="n">plot!</span><span class="p">(</span><span class="n">ns</span><span class="p">,</span><span class="w"> </span><span class="n">ns</span><span class="o">.^</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">),</span><span class="w"> </span><span class="n">xscale</span><span class="o">=</span><span class="ss">:log10</span><span class="p">,</span><span class="w"> </span><span class="n">yscale</span><span class="o">=</span><span class="ss">:log10</span><span class="p">)</span><span class="w">    </span>
+<span class="k">end</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>plot_quad_accuracy (generic function with 1 method)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">plot_quad_accuracy</span><span class="p">(</span><span class="n">exp</span><span class="p">,</span><span class="w"> </span><span class="n">exp</span><span class="p">,</span><span class="w"> </span><span class="n">quad_trapezoid</span><span class="p">)</span>
+<span class="n">plot_quad_accuracy</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="mi">3</span><span class="o">*</span><span class="n">x</span><span class="o">^</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">x</span><span class="o">^</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="n">quad_trapezoid</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/1837cb46a9056c6708e8c2d98e003372de48249552c474299e01d2732679ab0a.svg" src="../_images/1837cb46a9056c6708e8c2d98e003372de48249552c474299e01d2732679ab0a.svg" /></div>
+</div>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="integration-via-polynomial-interpolation">
+<h1>Integration via polynomial interpolation<a class="headerlink" href="#integration-via-polynomial-interpolation" title="Permalink to this heading">#</a></h1>
+<ul class="simple">
+<li><p>Pick some points <span class="math notranslate nohighlight">\(x_i\)</span></p></li>
+<li><p>Evaluate the function there <span class="math notranslate nohighlight">\(f_i = f(x_i)\)</span></p></li>
+<li><p>Find the polynomial that interpolates the data</p></li>
+<li><p>Integrate the polynomial</p></li>
+</ul>
+<section id="what-order-of-accuracy-can-we-expect">
+<h2>What order of accuracy can we expect?<a class="headerlink" href="#what-order-of-accuracy-can-we-expect" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p>What degree polynomials can be integrate exactly?</p></li>
+</ul>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="doing-better-gauss-quadrature">
+<h1>Doing better: Gauss quadrature<a class="headerlink" href="#doing-better-gauss-quadrature" title="Permalink to this heading">#</a></h1>
+<p>Suppose a polynomial on the interval <span class="math notranslate nohighlight">\([-1,1]\)</span> can be written as</p>
+<div class="math notranslate nohighlight">
+\[ P_n(x) q(x) + r(x) \]</div>
+<p>where <span class="math notranslate nohighlight">\(P_n(x)\)</span> is the <span class="math notranslate nohighlight">\(n\)</span>th Legendre polnomials and both <span class="math notranslate nohighlight">\(q(x)\)</span> and <span class="math notranslate nohighlight">\(r(x)\)</span> are polynomials of maximum degree <span class="math notranslate nohighlight">\(n-1\)</span>.</p>
+<ul class="simple">
+<li><p>Why is <span class="math notranslate nohighlight">\(\int_{-1}^1 P_n(x) q(x) = 0\)</span>?</p></li>
+<li><p>Can every polynomials of degree <span class="math notranslate nohighlight">\(2n-1\)</span> be written in the above form?</p></li>
+<li><p>How many roots does <span class="math notranslate nohighlight">\(P_n(x)\)</span> have on the interval?</p></li>
+<li><p>Can we choose points <span class="math notranslate nohighlight">\(\{x_i\}\)</span> such that the first term is 0?</p></li>
+</ul>
+<p>If <span class="math notranslate nohighlight">\(P_n(x_i) = 0\)</span> for each <span class="math notranslate nohighlight">\(x_i\)</span>, then we need only integrate <span class="math notranslate nohighlight">\(r(x)\)</span>, which is done exactly by integrating its interpolating polynomial.  How do we find these roots <span class="math notranslate nohighlight">\(x_i\)</span>?</p>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="gauss-legendre-in-code">
+<h1>Gauss-Legendre in code<a class="headerlink" href="#gauss-legendre-in-code" title="Permalink to this heading">#</a></h1>
+<ol class="arabic simple">
+<li><p>Solve for the points, compute the weights</p></li>
+</ol>
+<ul class="simple">
+<li><p>Use a Newton solver to find the roots. You can use the recurrence to write a recurrence for the derivatives.</p></li>
+<li><p>Create a Vandermonde matrix and extract the first row of the inverse or (using more structure) the derivatives at the quadrature points.</p></li>
+</ul>
+<ol class="arabic simple" start="2">
+<li><p>Use duality of polynomial roots and matrix eigenvalues.</p></li>
+</ol>
+<ul class="simple">
+<li><p>A fascinating mathematical voyage (topic of graduate linear algebra class).</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">function</span><span class="w"> </span><span class="n">gauss_legendre</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="w">    </span><span class="s">&quot;&quot;&quot;Gauss-Legendre integration using Golub-Welsch algorithm&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="n">beta</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nd">@.</span><span class="w"> </span><span class="mf">.5</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="p">(</span><span class="mi">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="o">:</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span><span class="o">^</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">))</span>
+<span class="w">    </span><span class="n">T</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">diagm</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">beta</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">beta</span><span class="p">)</span>
+<span class="w">    </span><span class="n">D</span><span class="p">,</span><span class="w"> </span><span class="n">V</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">eigen</span><span class="p">(</span><span class="n">T</span><span class="p">)</span>
+<span class="w">    </span><span class="n">w</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">V</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="o">:</span><span class="p">]</span><span class="o">.^</span><span class="mi">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">2</span>
+<span class="w">    </span><span class="n">q</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">D</span>
+<span class="w">    </span><span class="n">q</span><span class="p">,</span><span class="w"> </span><span class="n">w</span>
+<span class="k">end</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>gauss_legendre (generic function with 1 method)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">plot_quad_accuracy</span><span class="p">(</span><span class="n">exp</span><span class="p">,</span><span class="w"> </span><span class="n">exp</span><span class="p">,</span><span class="w"> </span><span class="n">gauss_legendre</span><span class="p">)</span>
+<span class="n">plot_quad_accuracy</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="mi">11</span><span class="o">*</span><span class="n">x</span><span class="o">^</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">x</span><span class="o">^</span><span class="mi">11</span><span class="p">,</span><span class="w"> </span><span class="n">gauss_legendre</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/88305cc1f95dc08f98bd9e2e5b291f9abc40f2620d9f76510bdb6465389dc946.svg" src="../_images/88305cc1f95dc08f98bd9e2e5b291f9abc40f2620d9f76510bdb6465389dc946.svg" /></div>
+</div>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="legendre-polynomials">
+<h1>Legendre polynomials<a class="headerlink" href="#legendre-polynomials" title="Permalink to this heading">#</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">function</span><span class="w"> </span><span class="n">vander_legendre</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">k</span><span class="o">=</span><span class="nb">nothing</span><span class="p">)</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="n">isnothing</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+<span class="w">        </span><span class="n">k</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">length</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="c"># Square by default</span>
+<span class="w">    </span><span class="k">end</span>
+<span class="w">    </span><span class="n">m</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">length</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="w">    </span><span class="n">Q</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ones</span><span class="p">(</span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">k</span><span class="p">)</span>
+<span class="w">    </span><span class="n">Q</span><span class="p">[</span><span class="o">:</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">1</span><span class="o">:</span><span class="n">k</span><span class="o">-</span><span class="mi">2</span>
+<span class="w">        </span><span class="n">Q</span><span class="p">[</span><span class="o">:</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="o">+</span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">((</span><span class="mi">2</span><span class="o">*</span><span class="n">n</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">.*</span><span class="w"> </span><span class="n">Q</span><span class="p">[</span><span class="o">:</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">Q</span><span class="p">[</span><span class="o">:</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">])</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span>
+<span class="w">    </span><span class="k">end</span>
+<span class="w">    </span><span class="n">Q</span>
+<span class="k">end</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>vander_legendre (generic function with 2 methods)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">LinRange</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">50</span><span class="p">)</span>
+<span class="n">P</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vander_legendre</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="mi">6</span><span class="p">)</span>
+<span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">P</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/fd3542c50517bf7dfe22b8ff6f4dd618a7fa2d22102a27061873e5a9cb3421ec.svg" src="../_images/fd3542c50517bf7dfe22b8ff6f4dd618a7fa2d22102a27061873e5a9cb3421ec.svg" /></div>
+</div>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="prime-to-nodal-basis">
+<h1>Prime to nodal basis<a class="headerlink" href="#prime-to-nodal-basis" title="Permalink to this heading">#</a></h1>
+<p>A <strong>nodal basis</strong> <span class="math notranslate nohighlight">\(\{ \phi_j(x) \}\)</span> is one that satisfies
+<span class="math notranslate nohighlight">\( n_i(\phi_j) = \delta_{ij} . \)</span></p>
+<p>We write <span class="math notranslate nohighlight">\(\phi_j\)</span> in the prime basis by solving with the generalized Vandermonde matrix <span class="math notranslate nohighlight">\(V_{ij} = \langle n_i, p_j \rangle\)</span>,
+<div class="math notranslate nohighlight">
+\[ \phi_j(x) = \sum_k p_k(x) (V^{-1})_{k,j} . \]</div>
+</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">k</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span>
+<span class="n">xn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">LinRange</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">k</span><span class="p">)</span>
+<span class="n">V</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vander_legendre</span><span class="p">(</span><span class="n">xn</span><span class="p">)</span>
+<span class="n">xx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">LinRange</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">50</span><span class="p">)</span>
+<span class="n">Pxx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vander_legendre</span><span class="p">(</span><span class="n">xx</span><span class="p">,</span><span class="w"> </span><span class="n">k</span><span class="p">)</span>
+<span class="n">Pn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Pxx</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">V</span>
+<span class="n">plot</span><span class="p">(</span><span class="n">xx</span><span class="p">,</span><span class="w"> </span><span class="n">Pn</span><span class="p">)</span>
+<span class="n">scatter!</span><span class="p">(</span><span class="n">xn</span><span class="p">,</span><span class="w"> </span><span class="n">one</span><span class="o">.</span><span class="p">(</span><span class="n">xn</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/865274501281d9a33d9234475b4cd3fa0c732599cd23f464288a9539c56d9dfe.svg" src="../_images/865274501281d9a33d9234475b4cd3fa0c732599cd23f464288a9539c56d9dfe.svg" /></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="n">FastGaussQuadrature</span>
+<span class="n">xn</span><span class="p">,</span><span class="w"> </span><span class="n">_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">gausslobatto</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+<span class="n">V</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vander_legendre</span><span class="p">(</span><span class="n">xn</span><span class="p">)</span>
+<span class="n">Pn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Pxx</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">V</span>
+<span class="n">plot</span><span class="p">(</span><span class="n">xx</span><span class="p">,</span><span class="w"> </span><span class="n">Pn</span><span class="p">)</span>
+<span class="n">scatter!</span><span class="p">(</span><span class="n">xn</span><span class="p">,</span><span class="w"> </span><span class="n">one</span><span class="o">.</span><span class="p">(</span><span class="n">xn</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/f8ca399b6ab4f1c2f4cda2df2cf2e033c3c02927a75d7cef306072e516618f51.svg" src="../_images/f8ca399b6ab4f1c2f4cda2df2cf2e033c3c02927a75d7cef306072e516618f51.svg" /></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">function</span><span class="w"> </span><span class="n">vander_legendre_deriv</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">k</span><span class="o">=</span><span class="nb">nothing</span><span class="p">)</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="n">isnothing</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+<span class="w">        </span><span class="n">k</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">length</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="c"># Square by default</span>
+<span class="w">    </span><span class="k">end</span>
+<span class="w">    </span><span class="n">m</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">length</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="w">    </span><span class="n">Q</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ones</span><span class="p">(</span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">k</span><span class="p">)</span>
+<span class="w">    </span><span class="n">dQ</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">zeros</span><span class="p">(</span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">k</span><span class="p">)</span>
+<span class="w">    </span><span class="n">Q</span><span class="p">[</span><span class="o">:</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span>
+<span class="w">    </span><span class="n">dQ</span><span class="p">[</span><span class="o">:</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">.=</span><span class="w"> </span><span class="mi">1</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">1</span><span class="o">:</span><span class="n">k</span><span class="o">-</span><span class="mi">2</span>
+<span class="w">        </span><span class="n">Q</span><span class="p">[</span><span class="o">:</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="o">+</span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">((</span><span class="mi">2</span><span class="o">*</span><span class="n">n</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">.*</span><span class="w"> </span><span class="n">Q</span><span class="p">[</span><span class="o">:</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">Q</span><span class="p">[</span><span class="o">:</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">])</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span>
+<span class="w">        </span><span class="n">dQ</span><span class="p">[</span><span class="o">:</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="o">+</span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">n</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">Q</span><span class="p">[</span><span class="o">:</span><span class="p">,</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">dQ</span><span class="p">[</span><span class="o">:</span><span class="p">,</span><span class="n">n</span><span class="p">]</span>
+<span class="w">    </span><span class="k">end</span>
+<span class="w">    </span><span class="n">Q</span><span class="p">,</span><span class="w"> </span><span class="n">dQ</span>
+<span class="k">end</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>vander_legendre_deriv (generic function with 2 methods)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="galerkin-method-l-2-projection">
+<h1>Galerkin method: <span class="math notranslate nohighlight">\(L^2\)</span> projection<a class="headerlink" href="#galerkin-method-l-2-projection" title="Permalink to this heading">#</a></h1>
+<p>A nice test problem that doesn’t require derivatives or boundary conditions:
+Find <span class="math notranslate nohighlight">\(u \in \mathcal V_h\)</span> such that
+<div class="math notranslate nohighlight">
+\[ \int_{-1}^1 v(x) \big[ u(x) - f(x) \big] = 0, \quad \forall v \in \mathcal V_h\]</div>
+</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">function</span><span class="w"> </span><span class="n">febasis</span><span class="p">(</span><span class="n">P</span><span class="p">,</span><span class="w"> </span><span class="n">Q</span><span class="p">)</span>
+<span class="w">    </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">gausslobatto</span><span class="p">(</span><span class="n">P</span><span class="p">)</span>
+<span class="w">    </span><span class="n">q</span><span class="p">,</span><span class="w"> </span><span class="n">w</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">gausslegendre</span><span class="p">(</span><span class="n">Q</span><span class="p">)</span>
+<span class="w">    </span><span class="n">Pk</span><span class="p">,</span><span class="w"> </span><span class="n">_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vander_legendre_deriv</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="w">    </span><span class="n">Bp</span><span class="p">,</span><span class="w"> </span><span class="n">Dp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vander_legendre_deriv</span><span class="p">(</span><span class="n">q</span><span class="p">,</span><span class="w"> </span><span class="n">P</span><span class="p">)</span>
+<span class="w">    </span><span class="n">B</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Bp</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">Pk</span>
+<span class="w">    </span><span class="n">D</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Dp</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">Pk</span>
+<span class="w">    </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">q</span><span class="p">,</span><span class="w"> </span><span class="n">w</span><span class="p">,</span><span class="w"> </span><span class="n">B</span><span class="p">,</span><span class="w"> </span><span class="n">D</span>
+<span class="k">end</span>
+
+<span class="k">function</span><span class="w"> </span><span class="n">L2_galerkin</span><span class="p">(</span><span class="n">P</span><span class="p">,</span><span class="w"> </span><span class="n">Q</span><span class="p">,</span><span class="w"> </span><span class="n">f</span><span class="p">)</span>
+<span class="w">    </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">q</span><span class="p">,</span><span class="w"> </span><span class="n">w</span><span class="p">,</span><span class="w"> </span><span class="n">B</span><span class="p">,</span><span class="w"> </span><span class="n">_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">febasis</span><span class="p">(</span><span class="n">P</span><span class="p">,</span><span class="w"> </span><span class="n">Q</span><span class="p">)</span>
+<span class="w">    </span><span class="n">A</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">B</span><span class="o">&#39;</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">diagm</span><span class="p">(</span><span class="n">w</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">B</span>
+<span class="w">    </span><span class="n">rhs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">B</span><span class="o">&#39;</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">diagm</span><span class="p">(</span><span class="n">w</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">f</span><span class="o">.</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>
+<span class="w">    </span><span class="n">u</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">A</span><span class="w"> </span><span class="o">\</span><span class="w"> </span><span class="n">rhs</span>
+<span class="w">    </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">u</span>
+<span class="k">end</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>L2_galerkin (generic function with 1 method)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">tanh</span><span class="p">(</span><span class="mi">5</span><span class="o">*</span><span class="n">x</span><span class="p">)</span>
+<span class="n">P</span><span class="p">,</span><span class="w"> </span><span class="n">Q</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span>
+<span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">u</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">L2_galerkin</span><span class="p">(</span><span class="n">P</span><span class="p">,</span><span class="w"> </span><span class="n">Q</span><span class="p">,</span><span class="w"> </span><span class="n">f</span><span class="p">)</span>
+<span class="n">error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">u</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">f</span><span class="o">.</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">u</span><span class="p">,</span><span class="w"> </span><span class="n">marker</span><span class="o">=</span><span class="ss">:auto</span><span class="p">,</span><span class="w"> </span><span class="n">legend</span><span class="o">=</span><span class="ss">:bottomright</span><span class="p">)</span>
+<span class="n">plot!</span><span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="w"> </span><span class="n">title</span><span class="o">=</span><span class="s">&quot;Galerkin error: </span><span class="si">$</span><span class="p">(</span><span class="n">norm</span><span class="p">(</span><span class="n">error</span><span class="p">))</span><span class="s">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/25065321ab2820408680be1dbfe4a21e7573c12a9df1f55558846cc1ccde3fe8.svg" src="../_images/25065321ab2820408680be1dbfe4a21e7573c12a9df1f55558846cc1ccde3fe8.svg" /></div>
+</div>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="embed-the-solution-in-the-continuous-space">
+<h1>Embed the solution in the continuous space<a class="headerlink" href="#embed-the-solution-in-the-continuous-space" title="Permalink to this heading">#</a></h1>
+<p>In thel last figure, the Galerkin solution was represented by a piecewise linear function, emphasizing its nodal values. Let’s make a nicer plot by multiplying by the corresponding nodal basis function.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">P</span><span class="p">,</span><span class="w"> </span><span class="n">Q</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">12</span>
+<span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">u</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">L2_galerkin</span><span class="p">(</span><span class="n">P</span><span class="p">,</span><span class="w"> </span><span class="n">Q</span><span class="p">,</span><span class="w"> </span><span class="n">f</span><span class="p">)</span>
+<span class="n">error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">u</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">f</span><span class="o">.</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">_</span><span class="p">,</span><span class="w"> </span><span class="n">xx</span><span class="p">,</span><span class="w"> </span><span class="n">_</span><span class="p">,</span><span class="w"> </span><span class="n">BB</span><span class="p">,</span><span class="w"> </span><span class="n">_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">febasis</span><span class="p">(</span><span class="n">P</span><span class="p">,</span><span class="w"> </span><span class="mi">100</span><span class="p">)</span>
+<span class="n">plot</span><span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="w"> </span><span class="n">label</span><span class="o">=</span><span class="s">&quot;exact&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">title</span><span class="o">=</span><span class="s">&quot;Galerkin error: </span><span class="si">$</span><span class="p">(</span><span class="n">norm</span><span class="p">(</span><span class="n">error</span><span class="p">))</span><span class="s">&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="n">xlim</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">),</span><span class="w"> </span><span class="n">legend</span><span class="o">=</span><span class="ss">:bottomright</span><span class="p">)</span>
+<span class="n">plot!</span><span class="p">(</span><span class="n">xx</span><span class="p">,</span><span class="w"> </span><span class="n">BB</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">u</span><span class="p">,</span><span class="w"> </span><span class="n">label</span><span class="o">=</span><span class="s">&quot;Galerkin solution&quot;</span><span class="p">)</span>
+<span class="n">scatter!</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">u</span><span class="p">,</span><span class="w"> </span><span class="n">marker</span><span class="o">=</span><span class="ss">:circle</span><span class="p">,</span><span class="w"> </span><span class="n">color</span><span class="o">=</span><span class="ss">:black</span><span class="p">,</span><span class="w"> </span><span class="n">label</span><span class="o">=</span><span class="s">&quot;Nodal values&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/e2d17d00f16074e3bd0ea2d65002a234259f555c6531f2418cb3ec25ab775078.svg" src="../_images/e2d17d00f16074e3bd0ea2d65002a234259f555c6531f2418cb3ec25ab775078.svg" /></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">ns</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">.^</span><span class="w"> </span><span class="p">(</span><span class="mi">2</span><span class="o">:</span><span class="mi">8</span><span class="p">)</span>
+<span class="k">function</span><span class="w"> </span><span class="n">L2_error</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="w">    </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">u</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">L2_galerkin</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="n">f</span><span class="p">)</span>
+<span class="w">    </span><span class="n">norm</span><span class="p">(</span><span class="n">u</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">f</span><span class="o">.</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+<span class="k">end</span>
+<span class="n">plot</span><span class="p">(</span><span class="n">ns</span><span class="p">,</span><span class="w"> </span><span class="n">L2_error</span><span class="o">.</span><span class="p">(</span><span class="n">ns</span><span class="p">),</span><span class="w"> </span><span class="n">marker</span><span class="o">=</span><span class="ss">:circle</span><span class="p">,</span><span class="w"> </span><span class="n">yscale</span><span class="o">=</span><span class="ss">:log10</span><span class="p">,</span>
+<span class="w">  </span><span class="n">title</span><span class="o">=</span><span class="s">&quot;Convergence&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">xlabel</span><span class="o">=</span><span class="s">&quot;number of points&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ylabel</span><span class="o">=</span><span class="s">&quot;error&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/b198f64fd81e17b124637d42d0277984f2d1ab2b7baa87f6faa1053f3cb37441.svg" src="../_images/b198f64fd81e17b124637d42d0277984f2d1ab2b7baa87f6faa1053f3cb37441.svg" /></div>
+</div>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="galerkin-error-estimates">
+<h1>Galerkin error estimates<a class="headerlink" href="#galerkin-error-estimates" title="Permalink to this heading">#</a></h1>
+<p>We introduce the notation
+<div class="math notranslate nohighlight">
+\[ a(v, u) = \int_\Omega \nabla v(x) \cdot \nabla u(x) \]</div>
+
+and note that <span class="math notranslate nohighlight">\(a\)</span> is</p>
+<ul class="simple">
+<li><p>bilinear (linear in each of its arguments)</p></li>
+<li><p>symmetric: <span class="math notranslate nohighlight">\(a(u, v) = a(v,u)\)</span></p></li>
+<li><p>positive definite: <span class="math notranslate nohighlight">\(a(u, u) &gt; 0\)</span> when <span class="math notranslate nohighlight">\(u \ne 0\)</span>
+thus defines an inner product on the function space <span class="math notranslate nohighlight">\(V\)</span>.</p></li>
+</ul>
+<p>We also introduce the <span class="math notranslate nohighlight">\(L^2\)</span> inner product
+<div class="math notranslate nohighlight">
+\[ \langle u, v \rangle = \int_\Omega u(x) v(x) \]</div>
+
+so that our continuous weak form is to find <span class="math notranslate nohighlight">\(u \in V\)</span> such that
+<div class="math notranslate nohighlight">
+\[ a(v, u) = \langle v, f \rangle, \quad \forall v\in V. \]</div>
+
+Our Galerkin discretization is to find <span class="math notranslate nohighlight">\(u_h \in V_h \subset V\)</span> such that
+<div class="math notranslate nohighlight">
+\[ a(v_h, u_h) = \langle v_h, f \rangle, \quad \forall v_h \in V_h . \]</div>
+
+Since <span class="math notranslate nohighlight">\(V_h \subset V\)</span>, we can subtract these two, yielding
+<div class="math notranslate nohighlight">
+\[ a(v_h, u_h - u) = 0, \quad \forall v_h \in V_h .\]</div>
+
+This says that the error in the discrete solution <span class="math notranslate nohighlight">\(u_h - u\)</span> is <span class="math notranslate nohighlight">\(a\)</span>-orthogonal to all test functions <span class="math notranslate nohighlight">\(v_h\)</span>.</p>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="galerkin-optimality-via-energy-norms">
+<h1>Galerkin optimality via energy norms<a class="headerlink" href="#galerkin-optimality-via-energy-norms" title="Permalink to this heading">#</a></h1>
+<p>We can also define the “energy norm” or <span class="math notranslate nohighlight">\(a\)</span>-norm,
+<div class="math notranslate nohighlight">
+\[ \lVert u \rVert_a = \sqrt{a(u,u)} . \]</div>
+
+This norm satisfies the Cauchy-Schwarz inequality,
+<div class="math notranslate nohighlight">
+\[ \lvert a(u,v) \rvert \le \lVert u \rVert_a \lVert v \rVert_a . \]</div>
+
+Now,</p>
+<div class="amsmath math notranslate nohighlight" id="equation-0d240e6d-fed8-47d4-8b36-5d7a6200177a">
+<span class="eqno">(48)<a class="headerlink" href="#equation-0d240e6d-fed8-47d4-8b36-5d7a6200177a" title="Permalink to this equation">#</a></span>\[\begin{align}
+\lVert u_h - u \rVert_a^2 &amp;= a(u_h - u, u_h - u) \\
+&amp;= a(u_h - v_h, u_h - u) + a(v_h - u, u_h - u) \\
+&amp;= a(v_h - u, u_h - u) \\
+&amp;\le \lVert v_h - u \rVert_a \lVert u_h - u \rVert_a .
+\end{align}\]</div>
+<p>In other words,
+<div class="math notranslate nohighlight">
+\[\lVert u_h - u \rVert_a \le \lVert v_h - u \rVert_a, \quad \forall v_h \in V_h .\]</div>
+
+So the solution <span class="math notranslate nohighlight">\(u_h\)</span> computed by the Galerkin discretization is optimal over the subspace <span class="math notranslate nohighlight">\(V_h\)</span> as measured in the <span class="math notranslate nohighlight">\(a\)</span>-norm.</p>
+<section id="observations">
+<h2>Observations<a class="headerlink" href="#observations" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p>The Galerkin method computes the exact solution any time it resides in the subspace <span class="math notranslate nohighlight">\(V_h\)</span>.</p></li>
+<li><p>The Galerkin method is automatically symmetric any time the weak form is symmetric.</p></li>
+<li><p>The Galerkin method can be spectrally accurate, similar to the Chebyshev finite difference methods.</p></li>
+<li><p>For a nonlinear problem, discretization and differentiation will commute.</p></li>
+</ul>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "cu-numpde/fall22",
+            ref: "main",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "julia-1.9"
+        },
+        kernelOptions: {
+            name: "julia-1.9",
+            path: "./slides"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'julia-1.9'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="2023-10-23-amg.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">2023-10-23 AMG</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="2023-10-30-fem.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">2023-10-30 Finite Element Theory</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">2023-10-25 Galerkin methods</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#last-time">Last time</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#today">Today</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#searching-for-projects">Searching for projects</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#github-codesearch">GitHub codesearch</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#journals">Journals</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#journal-of-open-source-software">Journal of Open Source Software</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#geoscientific-model-development">Geoscientific Model Development</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#integration-by-parts">Integration by parts</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#one-dimension">One dimension</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#multiple-dimensions">Multiple dimensions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#strong-form">Strong form</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#weak-form">Weak form</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#variational-from-minimization-to-weak-forms">Variational: from minimization to weak forms</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#minimization">Minimization</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#variations">Variations</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#finite-elements">Finite elements</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-statement">Problem statement</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#what-do-we-need">What do we need?</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ciarlet-1978-definition">Ciarlet (1978) definition</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#first-choose-a-single-element-k-omega">First: choose a single element <span class="math notranslate nohighlight">\(K = \Omega\)</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#quadrature">Quadrature</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#integration-via-polynomial-interpolation">Integration via polynomial interpolation</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-order-of-accuracy-can-we-expect">What order of accuracy can we expect?</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#doing-better-gauss-quadrature">Doing better: Gauss quadrature</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#gauss-legendre-in-code">Gauss-Legendre in code</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#legendre-polynomials">Legendre polynomials</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#prime-to-nodal-basis">Prime to nodal basis</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#galerkin-method-l-2-projection">Galerkin method: <span class="math notranslate nohighlight">\(L^2\)</span> projection</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#embed-the-solution-in-the-continuous-space">Embed the solution in the continuous space</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#galerkin-error-estimates">Galerkin error estimates</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#galerkin-optimality-via-energy-norms">Galerkin optimality via energy norms</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#observations">Observations</a></li>
+</ul>
+</li>
+</ul>
+
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Jed Brown
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
