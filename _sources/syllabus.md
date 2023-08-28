@@ -2,9 +2,9 @@
 
 ## Logistics
 
-CU Boulder: CSCI 5636-001(B) (Fall 2022)
+CU Boulder: CSCI 5636-001(B) (Fall 2023)
 
-Meeting Time: MWF 11:15-12:05 in ECCS 1B14
+Meeting Time: MWF 1:25-2:15 in ECCS 1B14
 
 ### Remote access via Zoom
 

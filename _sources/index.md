@@ -3,33 +3,33 @@
 Welcome to **CSCI-5636: Numerical Solution of Partial Differential Equations**
 
 :::{admonition} Logistics
-* Meeting Time: MWF 11:15-12:05 in ECCS 1B14
+* Meeting Time: MWF 1:25-2:15pm in ECCS 1B14
 * Office hours: [Choose a time](https://app.simplymeet.me/jed/numpde)
 * [Join in Zoom](https://cuboulder.zoom.us/j/92542412498)
 * [Canvas page](https://canvas.colorado.edu/courses/86159)
 :::
 
-::::{admonition} Activities
-:::{list-table}
-:header-rows: 1
-:widths: 30 70
-
-* - Name
-  - Objectives
-* - [2022-08-24-derivatives](https://classroom.github.com/a/8I4O5IcG)
-  - Use GitHub classroom and observe two kinds of numerical error: rounding error and discretization (aka. truncation) error.
-* - [2022-09-19-blasius](https://classroom.github.com/a/RBCyaHyy)
-  - Solve a nonlinear PDE using spectral methods. Learn libraries and assess accuracy.
-* - [Community project](https://classroom.github.com/a/3AzfU4zn)
-  - This has three parts: community presentation, contribution, and
-retrospective presentation about the contribution experience. The goal is to
-build a deeper understanding of how open source communities function, what
-metrics and implicit criteria are valued, and the design decisions and norms
-that went into making libraries and applications successful. In the first stage,
-you' ll survey the community, and in the second, you'll gain experience making a
-specific contribution of your choosing.
-:::
-::::
+% ::::{admonition} Activities
+% :::{list-table}
+% :header-rows: 1
+% :widths: 30 70
+% 
+% * - Name
+%   - Objectives
+% * - [2022-08-24-derivatives](https://classroom.github.com/a/8I4O5IcG)
+%   - Use GitHub classroom and observe two kinds of numerical error: rounding error and discretization (aka. truncation) error.
+% * - [2022-09-19-blasius](https://classroom.github.com/a/RBCyaHyy)
+%   - Solve a nonlinear PDE using spectral methods. Learn libraries and assess accuracy.
+% * - [Community project](https://classroom.github.com/a/3AzfU4zn)
+%   - This has three parts: community presentation, contribution, and
+% retrospective presentation about the contribution experience. The goal is to
+% build a deeper understanding of how open source communities function, what
+% metrics and implicit criteria are valued, and the design decisions and norms
+% that went into making libraries and applications successful. In the first stage,
+% you' ll survey the community, and in the second, you'll gain experience making a
+% specific contribution of your choosing.
+% :::
+% ::::
 
 :::{admonition} Resources
 
