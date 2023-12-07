@@ -2,14 +2,13 @@
 
 ## Logistics
 
-CU Boulder: CSCI 5636-001(B) (Fall 2023)
+CU Boulder: CSCI 5636-001/2 (Fall 2023)
 
 Meeting Time: MWF 1:25-2:15 in ECCS 1B14
 
 ### Remote access via Zoom
 
-* Join via web browser: https://cuboulder.zoom.us/j/99670441691
-* Join via Zoom app (using meeting 996 7044 1691)
+* Join via web browser: https://cuboulder.zoom.us/j/91936219432
 
 ### Recordings
 

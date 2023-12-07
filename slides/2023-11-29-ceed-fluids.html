@@ -1,0 +1,1527 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>2023-11-29 CEED Fluids &#8212; Numerical Solution of Partial Differential Equations</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'slides/2023-11-29-ceed-fluids';</script>
+    <link rel="shortcut icon" href="../_static/cu-numpde-square.svg"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="2023-12-01 Finite Volume" href="2023-12-01-finite-volume.html" />
+    <link rel="prev" title="2023-11-27 FE for Compressible flow" href="2023-11-27-fe-compressible.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/cu-numpde.svg" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="../_static/cu-numpde.svg" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    Welcome
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../syllabus.html">Syllabus</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../slides.html">Slides</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="2023-08-28-first-day.html">2023-08-28 First Day</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-08-30-finite-differences.html">2023-08-30 Finite Differences</a></li>
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-09-01-fd-solutions.html">2023-09-01 FD Solutions</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-09-06-fd-verification.html">2023-09-06 FD Verification</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-09-08-fourier.html">2023-09-08 Fourier and conditioning</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-09-11-chebyshev.html">2023-09-11 Chebyshev collocation</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-09-13-coefficients.html">2023-09-13 Variable coefficients</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-09-15-advection.html">2023-09-15 Advection</a></li>
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-09-18-sparsity.html">2023-09-18 Sparsity and solvers</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-09-20-nonlinear.html">2023-09-20 Nonlinear solvers</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-09-22-differentiation.html">2023-09-22 Differentiation</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-09-25-blasius.html">2023-09-25 Blasius</a></li>
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-09-27-transient.html">2023-09-27 Transient Intro</a></li>
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-09-29-transient.html">2023-09-29 Transient</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-10-02-stiffness.html">2023-10-02 Stiffness</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-10-04-runge-kutta.html">2023-10-04 Runge-Kutta</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-10-06-2d.html">2023-10-06 2D Advection-diffusion and waves</a></li>
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-10-09-factorization.html">2023-10-09 Factorization</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-10-11-linear-solvers.html">2023-10-13 Linear Solvers</a></li>
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-10-13-iterative.html">2023-10-16 Iterative Solvers</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-10-18-krylov.html">2023-10-18 Krylov and preconditioning</a></li>
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-10-20-preconditioning.html">2023-10-20 Preconditioning</a></li>
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-10-25-multigrid.html">2023-10-25 Multigrid</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-10-27-amg.html">2023-10-27 AMG</a></li>
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-10-30-galerkin.html">2023-10-30 Galerkin methods</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-11-01-fem.html">2023-11-01 Finite Elements</a></li>
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-11-03-applied-fe.html">2023-11-03 Applied Finite Elements</a></li>
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-11-06-solids.html">2023-11-06 Solid Mechanics</a></li>
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-11-13-ratel.html">2023-11-13 Ratel for Solid Mechanics</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-11-17-ratel-hands-on.html">2023-11-17 Ratel Hands-on</a></li>
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-11-27-fe-compressible.html">2023-11-27 FE for Compressible flow</a></li>
+
+
+
+
+
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">2023-11-29 CEED Fluids</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-12-01-finite-volume.html">2023-12-01 Finite Volume</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-12-04-reconstruction.html">2023-12-04 Reconstruction</a></li>
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-12-06-systems.html">2023-12-06 Systems</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</ul>
+</li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li>
+<button onclick="initThebeSBT()"
+  class="btn btn-sm btn-launch-thebe dropdown-item"
+  title="Launch Thebe"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-play"></i>
+  </span>
+<span class="btn__text-container">Live Code</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/cu-numpde/fall23" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/cu-numpde/fall23/issues/new?title=Issue%20on%20page%20%2Fslides/2023-11-29-ceed-fluids.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/slides/2023-11-29-ceed-fluids.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>2023-11-29 CEED Fluids</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">2023-11-29 CEED Fluids</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#last-time">Last time</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#today">Today</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#conservation-of-mass-momentum-and-energy">Conservation of mass, momentum, and energy</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#choice-of-variables">Choice of variables</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#acoustic-wave-speed">Acoustic wave speed</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mach-number">Mach number</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#primitive-variables">Primitive variables</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#blasius-profile-thanks-leila-ghaffari">Blasius profile (thanks, Leila Ghaffari)</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#stabilization">Stabilization</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#time-integration">Time integration</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#boundary-conditions-ref-mengaldo-et-al-2014">Boundary conditions (ref: Mengaldo et al (2014))</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#boundary-conditions">Boundary conditions</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#symmetry-free-slip">Symmetry (free slip)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#wall-no-slip">Wall (no-slip)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#freestream-boundaries">Freestream boundaries</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#viscous-inflow">Viscous inflow</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#viscous-outflow">Viscous outflow</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#convergence-to-steady-state-from-mengaldo">Convergence to steady state (from Mengaldo)</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#freestream-wave-test-problem">Freestream wave test problem</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hll">HLL</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hllc">HLLC</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#open-problem">Open Problem:</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#turbulent-viscous-inflow-and-outflow-with-non-reflecting-boundary-conditions">Turbulent viscous inflow and outflow with non-reflecting boundary conditions.</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#boundary-layers-for-turbulent-flow">Boundary layers for turbulent flow</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#running-on-alpine">Running on Alpine</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#running-in-docker">Running in Docker</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#vortex-shedding">Vortex shedding</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-setup">Problem setup</a></li>
+</ul>
+</li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="ceed-fluids">
+<h1>2023-11-29 CEED Fluids<a class="headerlink" href="#ceed-fluids" title="Permalink to this heading">#</a></h1>
+<section id="last-time">
+<h2>Last time<a class="headerlink" href="#last-time" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Equations</p>
+<ul>
+<li><p>Conservation</p></li>
+<li><p>Choice of variables</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="today">
+<h2>Today<a class="headerlink" href="#today" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p>SUPG stabilization</p></li>
+<li><p>Solvers</p></li>
+<li><p>Boundary conditions</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="n">Plots</span>
+<span class="n">default</span><span class="p">(</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="k">using</span><span class="w"> </span><span class="n">LinearAlgebra</span>
+<span class="k">using</span><span class="w"> </span><span class="n">SparseArrays</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="conservation-of-mass-momentum-and-energy">
+<h1>Conservation of mass, momentum, and energy<a class="headerlink" href="#conservation-of-mass-momentum-and-energy" title="Permalink to this heading">#</a></h1>
+<div class="math notranslate nohighlight">
+\[\newcommand{\bm}{\mathbf} \frac{\partial \bm{q}}{\partial t} + \nabla \cdot \bm{F}(\bm{q}) -S(\bm{q}) = 0\]</div>
+<div class="math notranslate nohighlight">
+\[\begin{split}\bm{q} =        \begin{pmatrix}            \rho \\             \rho \bm{ u }\\            E \equiv \rho e        \end{pmatrix}        \begin{array}{l}            \leftarrow\textrm{ volume mass density}\\            \leftarrow\textrm{ momentum density}\\            \leftarrow\textrm{ energy density}        \end{array}\end{split}\]</div>
+<ul class="simple">
+<li><p>Equation of state</p></li>
+</ul>
+<div class="amsmath math notranslate nohighlight" id="equation-501f8ec3-bf2f-4b57-9887-de429c9e8d38">
+<span class="eqno">(61)<a class="headerlink" href="#equation-501f8ec3-bf2f-4b57-9887-de429c9e8d38" title="Permalink to this equation">#</a></span>\[\begin{align}
+P &amp;= \Big(\underbrace{\frac{c_p}{c_v}}_{\gamma} - 1\Big)\underbrace{\left(E - \frac\rho 2 \bm u \cdot \bm u - \rho g z \right)}_{\rho e_{\text{internal}}} \\
+T &amp;= e_{\text{internal}} / c_v
+\end{align}\]</div>
+<p>\begin{aligned}
+\bm{F}(\bm{q}) &amp;=
+\underbrace{\begin{pmatrix}
+\rho\bm{u}\
+{\rho \bm{u} \otimes \bm{u}} + P \bm{I}<em>3 \
+{(E + P)\bm{u}}
+\end{pmatrix}}</em>{\bm F_{\text{adv}}} +
+\underbrace{\begin{pmatrix}
+0 \</p>
+<ul>
+<li><p>\bm{\sigma} \</p></li>
+<li><p>\bm{u}  \cdot \bm{\sigma} - k \nabla T
+\end{pmatrix}}<em>{\bm F</em>{\text{diff}}},\
+S(\bm{q}) &amp;=</p></li>
+<li><div class="amsmath math notranslate nohighlight" id="equation-17ba10c0-8eeb-4a0b-a65d-b0f5fb91cdda">
+<span class="eqno">(62)<a class="headerlink" href="#equation-17ba10c0-8eeb-4a0b-a65d-b0f5fb91cdda" title="Permalink to this equation">#</a></span>\[\begin{pmatrix}
+    0\\
+    \rho g \bm{\hat{k}}\\
+    0
+\end{pmatrix}\]</div>
+</li>
+</ul>
+<p>\end{aligned}</p>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="choice-of-variables">
+<h1>Choice of variables<a class="headerlink" href="#choice-of-variables" title="Permalink to this heading">#</a></h1>
+<section id="acoustic-wave-speed">
+<h2>Acoustic wave speed<a class="headerlink" href="#acoustic-wave-speed" title="Permalink to this heading">#</a></h2>
+<div class="math notranslate nohighlight">
+\[a = \sqrt{c_p(\gamma - 1) T}\]</div>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>material</p></th>
+<th class="head"><p>speed</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>air</p></td>
+<td><p>340 m/s</p></td>
+</tr>
+<tr class="row-odd"><td><p>water</p></td>
+<td><p>1500 m/s</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="mach-number">
+<h2>Mach number<a class="headerlink" href="#mach-number" title="Permalink to this heading">#</a></h2>
+<div class="math notranslate nohighlight">
+\[\mathrm{Ma} = \frac{\lVert \bm u \rVert}{a}\]</div>
+</section>
+<section id="primitive-variables">
+<h2>Primitive variables<a class="headerlink" href="#primitive-variables" title="Permalink to this heading">#</a></h2>
+<div class="math notranslate nohighlight">
+\[\begin{split}\bm y = \begin{pmatrix} P \\ \bm u \\ T \end{pmatrix}\end{split}\]</div>
+<p>Using the equation of state, we can write
+<span class="math notranslate nohighlight">\(\bm y(\bm q)\)</span> or <span class="math notranslate nohighlight">\(\bm q(\bm y)\)</span>. But these transformations are <strong>ill conditioned for <span class="math notranslate nohighlight">\(\mathrm{Ma} \ll 1\)</span></strong>.</p>
+<div class="math notranslate nohighlight">
+\[ \frac{\partial \bm q}{\partial t} = \frac{\partial \bm q}{\partial \bm y} \frac{\partial \bm y}{\partial t}\]</div>
+</section>
+<section id="blasius-profile-thanks-leila-ghaffari">
+<h2>Blasius profile (thanks, Leila Ghaffari)<a class="headerlink" href="#blasius-profile-thanks-leila-ghaffari" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Take an analytic Blasius profile.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Primitive</span></code>: Write <span class="math notranslate nohighlight">\(\bm y\)</span> in a piecewise linear space with nodally exact values.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Conservative</span></code>: Write <span class="math notranslate nohighlight">\(\bm q\)</span> in a piecewise linear space with nodally exact values.</p></li>
+</ul>
+<img alt="../_images/Temperature_p1.png" src="../_images/Temperature_p1.png" />
+<img alt="../_images/Temperature_p2.png" src="../_images/Temperature_p2.png" />
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="stabilization">
+<h1>Stabilization<a class="headerlink" href="#stabilization" title="Permalink to this heading">#</a></h1>
+<div class="amsmath math notranslate nohighlight" id="equation-17b1e79d-ee93-4caa-889a-efaef96ef603">
+<span class="eqno">(63)<a class="headerlink" href="#equation-17b1e79d-ee93-4caa-889a-efaef96ef603" title="Permalink to this equation">#</a></span>\[\begin{align}
+  \int_{\Omega} \bm v \cdot \left( \frac{\partial \bm{q}}{\partial t} - \bm{S}(\bm{y}) \right)  \,dV
+  - \int_{\Omega} \nabla \bm v \!:\! \bm{F}(\bm{y})\,dV &amp; \\
+  + \int_{\partial \Omega} \bm v \cdot \bm{F}(\bm{y}) \cdot \widehat{\bm{n}} \,dS &amp; \\
+  + \int_{\Omega} \nabla \bm v : \frac{\partial \bm F_{\text{adv}}}{\partial \bm q} \bm \tau \left( \frac{\partial \bm{q}}{\partial t} \, + \,
+  \nabla \cdot \bm{F} \, (\bm{y}) - \bm{S}(\bm{y}) \right) \,dV &amp;= 0
+\end{align}\]</div>
+<ul class="simple">
+<li><p>Boundary term needs to be replaced with actual boundary conditions</p></li>
+<li><p>The strong form term <span class="math notranslate nohighlight">\(\nabla\cdot \bm F(\bm y)\)</span></p>
+<ul>
+<li><p>is ill-defined at shocks or discontinuous materials</p></li>
+<li><p>involves the second derivative of velocity and temperature; many ignore for linear elements, but <a class="reference external" href="https://doi.org/10.1016/S0045-7825(98)00284-9">it’s better</a> to use a (lumped) projection.</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="time-integration">
+<h1>Time integration<a class="headerlink" href="#time-integration" title="Permalink to this heading">#</a></h1>
+<ul class="simple">
+<li><p>Fully implicit <span class="math notranslate nohighlight">\(G(t, \bm y, \dot{\bm y}) = 0\)</span> with generalized alpha.</p></li>
+<li><p>Newton method, usually about 3 iterations per time step.</p></li>
+<li><p>Krylov method</p>
+<ul>
+<li><p>GMRES when using a strong preconditioner</p>
+<ul>
+<li><p>Block Jacobi/incomplete LU</p></li>
+</ul>
+</li>
+<li><p>BCGS(<span class="math notranslate nohighlight">\(\ell\)</span>) with a weak preconditioner</p>
+<ul>
+<li><p>Point-block Jacobi</p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="boundary-conditions-ref-mengaldo-et-al-2014">
+<h1>Boundary conditions (ref: <a class="reference external" href="https://doi.org/10.2514/6.2014-2923">Mengaldo et al (2014)</a>)<a class="headerlink" href="#boundary-conditions-ref-mengaldo-et-al-2014" title="Permalink to this heading">#</a></h1>
+<img alt="../_images/Mengaldo-Fig6.png" src="../_images/Mengaldo-Fig6.png" />
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="boundary-conditions">
+<h1>Boundary conditions<a class="headerlink" href="#boundary-conditions" title="Permalink to this heading">#</a></h1>
+<ul class="simple">
+<li><p>Unlike solid mechanics, the “natural” boundary condition is not physical (it’s like a free surface). So we need boundary conditions all around.</p></li>
+</ul>
+<section id="symmetry-free-slip">
+<h2>Symmetry (free slip)<a class="headerlink" href="#symmetry-free-slip" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Normal velocity = 0, no boundary integral</p></li>
+</ul>
+</section>
+<section id="wall-no-slip">
+<h2>Wall (no-slip)<a class="headerlink" href="#wall-no-slip" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Total velocity = 0</p></li>
+<li><p>Can prescribe temperature (heat sink) or leave it insulated (more complicated for conservative variables)</p></li>
+</ul>
+</section>
+<section id="freestream-boundaries">
+<h2>Freestream boundaries<a class="headerlink" href="#freestream-boundaries" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Unified way to handle inflow and outflow (sometimes both).</p></li>
+<li><p>Requires solving a “Riemann problem”</p></li>
+</ul>
+</section>
+<section id="viscous-inflow">
+<h2>Viscous inflow<a class="headerlink" href="#viscous-inflow" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Prescribe velocity and temperature, compute boundary integral for energy flux.</p></li>
+</ul>
+</section>
+<section id="viscous-outflow">
+<h2>Viscous outflow<a class="headerlink" href="#viscous-outflow" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Prescribe pressure, compute flux with modified ghost pressure <span class="math notranslate nohighlight">\(2 P_{\text{ext}} - P_{\text{int}}\)</span></p></li>
+<li><p>Compute viscous flux based on interior values</p></li>
+</ul>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="convergence-to-steady-state-from-mengaldo">
+<h1>Convergence to steady state (from Mengaldo)<a class="headerlink" href="#convergence-to-steady-state-from-mengaldo" title="Permalink to this heading">#</a></h1>
+<img alt="../_images/Mengaldo-Fig7.png" src="../_images/Mengaldo-Fig7.png" />
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="freestream-wave-test-problem">
+<h1>Freestream wave test problem<a class="headerlink" href="#freestream-wave-test-problem" title="Permalink to this heading">#</a></h1>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ mpiexec -n 6 build/fluids-navierstokes -options_file examples/fluids/newtonianwave.yaml
+</pre></div>
+</div>
+<section id="hll">
+<h2>HLL<a class="headerlink" href="#hll" title="Permalink to this heading">#</a></h2>
+<video src="../img/nwave-hll.webm" loop controls /></section>
+<section id="hllc">
+<h2>HLLC<a class="headerlink" href="#hllc" title="Permalink to this heading">#</a></h2>
+<video src="../img/nwave-hllc.webm" loop controls /></section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="open-problem">
+<h1>Open Problem:<a class="headerlink" href="#open-problem" title="Permalink to this heading">#</a></h1>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="turbulent-viscous-inflow-and-outflow-with-non-reflecting-boundary-conditions">
+<h1>Turbulent viscous inflow and outflow with non-reflecting boundary conditions.<a class="headerlink" href="#turbulent-viscous-inflow-and-outflow-with-non-reflecting-boundary-conditions" title="Permalink to this heading">#</a></h1>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="boundary-layers-for-turbulent-flow">
+<h1>Boundary layers for turbulent flow<a class="headerlink" href="#boundary-layers-for-turbulent-flow" title="Permalink to this heading">#</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">dymin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">2.66077e-5</span>
+<span class="n">alpha_BL</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.05</span>
+<span class="n">dymax_BL</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.00266077</span>
+<span class="n">alpha_OBL</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.2</span>
+<span class="n">dymax_OBL</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.1</span>
+<span class="n">delta</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.21</span>
+
+<span class="k">function</span><span class="w"> </span><span class="n">phasta_spacing</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="w">    </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">zeros</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+<span class="w">    </span><span class="n">h</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">zeros</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+<span class="w">    </span><span class="n">h</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dymin</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">2</span><span class="o">:</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span>
+<span class="w">        </span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">h</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="w">        </span><span class="n">h</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">delta</span>
+<span class="w">            </span><span class="n">min</span><span class="p">(</span><span class="n">h</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">alpha_BL</span><span class="p">,</span><span class="w"> </span><span class="n">dymax_BL</span><span class="p">)</span>
+<span class="w">        </span><span class="k">else</span>
+<span class="w">            </span><span class="n">min</span><span class="p">(</span><span class="n">h</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">alpha_OBL</span><span class="p">,</span><span class="w"> </span><span class="n">dymax_OBL</span><span class="p">)</span>
+<span class="w">        </span><span class="k">end</span>
+<span class="w">    </span><span class="k">end</span>
+<span class="w">    </span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">h</span>
+<span class="k">end</span>
+
+<span class="n">h_IBL</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dymin</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">alpha_BL</span><span class="w"> </span><span class="o">^</span><span class="w"> </span><span class="p">(</span><span class="n">s</span><span class="o">*</span><span class="n">n</span><span class="p">)</span>
+<span class="n">H_IBL</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dymin</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">alpha_BL</span><span class="w"> </span><span class="o">^</span><span class="w"> </span><span class="p">(</span><span class="n">s</span><span class="o">*</span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">log</span><span class="p">(</span><span class="n">alpha_BL</span><span class="p">)</span>
+
+<span class="k">function</span><span class="w"> </span><span class="n">fractional_spacing</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="w">    </span><span class="c"># find first junction</span>
+<span class="w">    </span><span class="n">x_IBL</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">log</span><span class="p">(</span><span class="n">dymax_BL</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">dymin</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">log</span><span class="p">(</span><span class="n">alpha_BL</span><span class="p">))</span>
+
+<span class="w">    </span><span class="c"># find second junction by integrating</span>
+<span class="w">    </span><span class="n">y_IBL</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">H_IBL</span><span class="p">(</span><span class="n">x_IBL</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">H_IBL</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="w">    </span><span class="c"># find x such that y_IBL + dymax_BL * (x - x_IBL)*n = delta</span>
+<span class="w">    </span><span class="n">x_delta</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x_IBL</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="p">(</span><span class="n">delta</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">y_IBL</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="n">dymax_BL</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">n</span><span class="p">)</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="c"># find third junction</span>
+<span class="w">    </span><span class="n">x_OBL</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x_delta</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">log</span><span class="p">(</span><span class="n">dymax_OBL</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">dymax_BL</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">log</span><span class="p">(</span><span class="n">alpha_OBL</span><span class="p">))</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">x_IBL</span>
+<span class="w">        </span><span class="n">h_IBL</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="w">    </span><span class="k">elseif</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">x_delta</span>
+<span class="w">        </span><span class="n">dymax_BL</span>
+<span class="w">    </span><span class="k">elseif</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">x_OBL</span>
+<span class="w">        </span><span class="n">dymax_BL</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">alpha_OBL</span><span class="w"> </span><span class="o">^</span><span class="w"> </span><span class="p">((</span><span class="n">x</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">x_delta</span><span class="p">)</span><span class="o">*</span><span class="n">n</span><span class="p">)</span>
+<span class="w">    </span><span class="k">else</span>
+<span class="w">        </span><span class="n">dymax_OBL</span>
+<span class="w">    </span><span class="k">end</span>
+<span class="k">end</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>fractional_spacing (generic function with 1 method)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">200</span>
+<span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">h</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">phasta_spacing</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="n">plot</span><span class="p">((</span><span class="mi">0</span><span class="o">:</span><span class="n">n</span><span class="p">)</span><span class="o">/</span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="n">h</span><span class="p">,</span><span class="w"> </span><span class="n">yscale</span><span class="o">=</span><span class="ss">:log10</span><span class="p">,</span><span class="w"> </span><span class="n">legend</span><span class="o">=</span><span class="ss">:none</span><span class="p">,</span><span class="w"> </span><span class="n">ylabel</span><span class="o">=</span><span class="s">&quot;</span><span class="se">\$</span><span class="s">h</span><span class="se">\$</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">xlabel</span><span class="o">=</span><span class="s">&quot;fractional elements from wall&quot;</span><span class="p">)</span>
+<span class="n">plot!</span><span class="p">(</span><span class="n">fractional_spacing</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><?xml version="1.0" encoding="utf-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="600" height="400" viewBox="0 0 2400 1600">
+<defs>
+  <clipPath id="clip790">
+    <rect x="0" y="0" width="2400" height="1600"/>
+  </clipPath>
+</defs>
+<path clip-path="url(#clip790)" d="M0 1600 L2400 1600 L2400 0 L0 0  Z" fill="#ffffff" fill-rule="evenodd" fill-opacity="1"/>
+<defs>
+  <clipPath id="clip791">
+    <rect x="480" y="0" width="1681" height="1600"/>
+  </clipPath>
+</defs>
+<path clip-path="url(#clip790)" d="M252.764 1423.18 L2352.76 1423.18 L2352.76 47.2441 L252.764 47.2441  Z" fill="#ffffff" fill-rule="evenodd" fill-opacity="1"/>
+<defs>
+  <clipPath id="clip792">
+    <rect x="252" y="47" width="2101" height="1377"/>
+  </clipPath>
+</defs>
+<polyline clip-path="url(#clip792)" style="stroke:#000000; stroke-linecap:round; stroke-linejoin:round; stroke-width:2; stroke-opacity:0.1; fill:none" points="312.198,1423.18 312.198,47.2441 "/>
+<polyline clip-path="url(#clip792)" style="stroke:#000000; stroke-linecap:round; stroke-linejoin:round; stroke-width:2; stroke-opacity:0.1; fill:none" points="807.479,1423.18 807.479,47.2441 "/>
+<polyline clip-path="url(#clip792)" style="stroke:#000000; stroke-linecap:round; stroke-linejoin:round; stroke-width:2; stroke-opacity:0.1; fill:none" points="1302.76,1423.18 1302.76,47.2441 "/>
+<polyline clip-path="url(#clip792)" style="stroke:#000000; stroke-linecap:round; stroke-linejoin:round; stroke-width:2; stroke-opacity:0.1; fill:none" points="1798.04,1423.18 1798.04,47.2441 "/>
+<polyline clip-path="url(#clip792)" style="stroke:#000000; stroke-linecap:round; stroke-linejoin:round; stroke-width:2; stroke-opacity:0.1; fill:none" points="2293.32,1423.18 2293.32,47.2441 "/>
+<polyline clip-path="url(#clip790)" style="stroke:#000000; stroke-linecap:round; stroke-linejoin:round; stroke-width:4; stroke-opacity:1; fill:none" points="252.764,1423.18 2352.76,1423.18 "/>
+<polyline clip-path="url(#clip790)" style="stroke:#000000; stroke-linecap:round; stroke-linejoin:round; stroke-width:4; stroke-opacity:1; fill:none" points="312.198,1423.18 312.198,1404.28 "/>
+<polyline clip-path="url(#clip790)" style="stroke:#000000; stroke-linecap:round; stroke-linejoin:round; stroke-width:4; stroke-opacity:1; fill:none" points="807.479,1423.18 807.479,1404.28 "/>
+<polyline clip-path="url(#clip790)" style="stroke:#000000; stroke-linecap:round; stroke-linejoin:round; stroke-width:4; stroke-opacity:1; fill:none" points="1302.76,1423.18 1302.76,1404.28 "/>
+<polyline clip-path="url(#clip790)" style="stroke:#000000; stroke-linecap:round; stroke-linejoin:round; stroke-width:4; stroke-opacity:1; fill:none" points="1798.04,1423.18 1798.04,1404.28 "/>
+<polyline clip-path="url(#clip790)" style="stroke:#000000; stroke-linecap:round; stroke-linejoin:round; stroke-width:4; stroke-opacity:1; fill:none" points="2293.32,1423.18 2293.32,1404.28 "/>
+<path clip-path="url(#clip790)" d="M274.501 1454.1 Q270.89 1454.1 269.061 1457.66 Q267.256 1461.2 267.256 1468.33 Q267.256 1475.44 269.061 1479.01 Q270.89 1482.55 274.501 1482.55 Q278.135 1482.55 279.941 1479.01 Q281.77 1475.44 281.77 1468.33 Q281.77 1461.2 279.941 1457.66 Q278.135 1454.1 274.501 1454.1 M274.501 1450.39 Q280.311 1450.39 283.367 1455 Q286.446 1459.58 286.446 1468.33 Q286.446 1477.06 283.367 1481.67 Q280.311 1486.25 274.501 1486.25 Q268.691 1486.25 265.612 1481.67 Q262.557 1477.06 262.557 1468.33 Q262.557 1459.58 265.612 1455 Q268.691 1450.39 274.501 1450.39 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1" /><path clip-path="url(#clip790)" d="M294.663 1479.7 L299.547 1479.7 L299.547 1485.58 L294.663 1485.58 L294.663 1479.7 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1" /><path clip-path="url(#clip790)" d="M319.732 1454.1 Q316.121 1454.1 314.293 1457.66 Q312.487 1461.2 312.487 1468.33 Q312.487 1475.44 314.293 1479.01 Q316.121 1482.55 319.732 1482.55 Q323.367 1482.55 325.172 1479.01 Q327.001 1475.44 327.001 1468.33 Q327.001 1461.2 325.172 1457.66 Q323.367 1454.1 319.732 1454.1 M319.732 1450.39 Q325.543 1450.39 328.598 1455 Q331.677 1459.58 331.677 1468.33 Q331.677 1477.06 328.598 1481.67 Q325.543 1486.25 319.732 1486.25 Q313.922 1486.25 310.844 1481.67 Q307.788 1477.06 307.788 1468.33 Q307.788 1459.58 310.844 1455 Q313.922 1450.39 319.732 1450.39 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1" /><path clip-path="url(#clip790)" d="M349.894 1454.1 Q346.283 1454.1 344.454 1457.66 Q342.649 1461.2 342.649 1468.33 Q342.649 1475.44 344.454 1479.01 Q346.283 1482.55 349.894 1482.55 Q353.528 1482.55 355.334 1479.01 Q357.163 1475.44 357.163 1468.33 Q357.163 1461.2 355.334 1457.66 Q353.528 1454.1 349.894 1454.1 M349.894 1450.39 Q355.704 1450.39 358.76 1455 Q361.839 1459.58 361.839 1468.33 Q361.839 1477.06 358.76 1481.67 Q355.704 1486.25 349.894 1486.25 Q344.084 1486.25 341.005 1481.67 Q337.95 1477.06 337.95 1468.33 Q337.95 1459.58 341.005 1455 Q344.084 1450.39 349.894 1450.39 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1" /><path clip-path="url(#clip790)" d="M770.28 1454.1 Q766.669 1454.1 764.84 1457.66 Q763.035 1461.2 763.035 1468.33 Q763.035 1475.44 764.84 1479.01 Q766.669 1482.55 770.28 1482.55 Q773.914 1482.55 775.72 1479.01 Q777.548 1475.44 777.548 1468.33 Q777.548 1461.2 775.72 1457.66 Q773.914 1454.1 770.28 1454.1 M770.28 1450.39 Q776.09 1450.39 779.146 1455 Q782.224 1459.58 782.224 1468.33 Q782.224 1477.06 779.146 1481.67 Q776.09 1486.25 770.28 1486.25 Q764.47 1486.25 761.391 1481.67 Q758.336 1477.06 758.336 1468.33 Q758.336 1459.58 761.391 1455 Q764.47 1450.39 770.28 1450.39 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1" /><path clip-path="url(#clip790)" d="M790.442 1479.7 L795.326 1479.7 L795.326 1485.58 L790.442 1485.58 L790.442 1479.7 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1" /><path clip-path="url(#clip790)" d="M809.539 1481.64 L825.858 1481.64 L825.858 1485.58 L803.914 1485.58 L803.914 1481.64 Q806.576 1478.89 811.159 1474.26 Q815.766 1469.61 816.946 1468.27 Q819.192 1465.74 820.071 1464.01 Q820.974 1462.25 820.974 1460.56 Q820.974 1457.8 819.03 1456.07 Q817.108 1454.33 814.007 1454.33 Q811.807 1454.33 809.354 1455.09 Q806.923 1455.86 804.145 1457.41 L804.145 1452.69 Q806.97 1451.55 809.423 1450.97 Q811.877 1450.39 813.914 1450.39 Q819.284 1450.39 822.479 1453.08 Q825.673 1455.77 825.673 1460.26 Q825.673 1462.39 824.863 1464.31 Q824.076 1466.2 821.969 1468.8 Q821.391 1469.47 818.289 1472.69 Q815.187 1475.88 809.539 1481.64 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1" /><path clip-path="url(#clip790)" d="M835.719 1451.02 L854.076 1451.02 L854.076 1454.96 L840.002 1454.96 L840.002 1463.43 Q841.02 1463.08 842.039 1462.92 Q843.057 1462.73 844.076 1462.73 Q849.863 1462.73 853.242 1465.9 Q856.622 1469.08 856.622 1474.49 Q856.622 1480.07 853.15 1483.17 Q849.678 1486.25 843.358 1486.25 Q841.182 1486.25 838.914 1485.88 Q836.668 1485.51 834.261 1484.77 L834.261 1480.07 Q836.344 1481.2 838.567 1481.76 Q840.789 1482.32 843.266 1482.32 Q847.27 1482.32 849.608 1480.21 Q851.946 1478.1 851.946 1474.49 Q851.946 1470.88 849.608 1468.77 Q847.27 1466.67 843.266 1466.67 Q841.391 1466.67 839.516 1467.08 Q837.664 1467.5 835.719 1468.38 L835.719 1451.02 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1" /><path clip-path="url(#clip790)" d="M1265.06 1454.1 Q1261.45 1454.1 1259.62 1457.66 Q1257.82 1461.2 1257.82 1468.33 Q1257.82 1475.44 1259.62 1479.01 Q1261.45 1482.55 1265.06 1482.55 Q1268.7 1482.55 1270.5 1479.01 Q1272.33 1475.44 1272.33 1468.33 Q1272.33 1461.2 1270.5 1457.66 Q1268.7 1454.1 1265.06 1454.1 M1265.06 1450.39 Q1270.87 1450.39 1273.93 1455 Q1277.01 1459.58 1277.01 1468.33 Q1277.01 1477.06 1273.93 1481.67 Q1270.87 1486.25 1265.06 1486.25 Q1259.25 1486.25 1256.17 1481.67 Q1253.12 1477.06 1253.12 1468.33 Q1253.12 1459.58 1256.17 1455 Q1259.25 1450.39 1265.06 1450.39 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1" /><path clip-path="url(#clip790)" d="M1285.23 1479.7 L1290.11 1479.7 L1290.11 1485.58 L1285.23 1485.58 L1285.23 1479.7 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1" /><path clip-path="url(#clip790)" d="M1300.34 1451.02 L1318.7 1451.02 L1318.7 1454.96 L1304.62 1454.96 L1304.62 1463.43 Q1305.64 1463.08 1306.66 1462.92 Q1307.68 1462.73 1308.7 1462.73 Q1314.48 1462.73 1317.86 1465.9 Q1321.24 1469.08 1321.24 1474.49 Q1321.24 1480.07 1317.77 1483.17 Q1314.3 1486.25 1307.98 1486.25 Q1305.8 1486.25 1303.54 1485.88 Q1301.29 1485.51 1298.88 1484.77 L1298.88 1480.07 Q1300.97 1481.2 1303.19 1481.76 Q1305.41 1482.32 1307.89 1482.32 Q1311.89 1482.32 1314.23 1480.21 Q1316.57 1478.1 1316.57 1474.49 Q1316.57 1470.88 1314.23 1468.77 Q1311.89 1466.67 1307.89 1466.67 Q1306.01 1466.67 1304.14 1467.08 Q1302.29 1467.5 1300.34 1468.38 L1300.34 1451.02 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1" /><path clip-path="url(#clip790)" d="M1340.46 1454.1 Q1336.85 1454.1 1335.02 1457.66 Q1333.21 1461.2 1333.21 1468.33 Q1333.21 1475.44 1335.02 1479.01 Q1336.85 1482.55 1340.46 1482.55 Q1344.09 1482.55 1345.9 1479.01 Q1347.72 1475.44 1347.72 1468.33 Q1347.72 1461.2 1345.9 1457.66 Q1344.09 1454.1 1340.46 1454.1 M1340.46 1450.39 Q1346.27 1450.39 1349.32 1455 Q1352.4 1459.58 1352.4 1468.33 Q1352.4 1477.06 1349.32 1481.67 Q1346.27 1486.25 1340.46 1486.25 Q1334.65 1486.25 1331.57 1481.67 Q1328.51 1477.06 1328.51 1468.33 Q1328.51 1459.58 1331.57 1455 Q1334.65 1450.39 1340.46 1450.39 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1" /><path clip-path="url(#clip790)" d="M1760.84 1454.1 Q1757.23 1454.1 1755.4 1457.66 Q1753.6 1461.2 1753.6 1468.33 Q1753.6 1475.44 1755.4 1479.01 Q1757.23 1482.55 1760.84 1482.55 Q1764.48 1482.55 1766.28 1479.01 Q1768.11 1475.44 1768.11 1468.33 Q1768.11 1461.2 1766.28 1457.66 Q1764.48 1454.1 1760.84 1454.1 M1760.84 1450.39 Q1766.65 1450.39 1769.71 1455 Q1772.79 1459.58 1772.79 1468.33 Q1772.79 1477.06 1769.71 1481.67 Q1766.65 1486.25 1760.84 1486.25 Q1755.03 1486.25 1751.95 1481.67 Q1748.9 1477.06 1748.9 1468.33 Q1748.9 1459.58 1751.95 1455 Q1755.03 1450.39 1760.84 1450.39 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1" /><path clip-path="url(#clip790)" d="M1781 1479.7 L1785.89 1479.7 L1785.89 1485.58 L1781 1485.58 L1781 1479.7 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1" /><path clip-path="url(#clip790)" d="M1794.89 1451.02 L1817.12 1451.02 L1817.12 1453.01 L1804.57 1485.58 L1799.68 1485.58 L1811.49 1454.96 L1794.89 1454.96 L1794.89 1451.02 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1" /><path clip-path="url(#clip790)" d="M1826.28 1451.02 L1844.64 1451.02 L1844.64 1454.96 L1830.56 1454.96 L1830.56 1463.43 Q1831.58 1463.08 1832.6 1462.92 Q1833.62 1462.73 1834.64 1462.73 Q1840.43 1462.73 1843.8 1465.9 Q1847.18 1469.08 1847.18 1474.49 Q1847.18 1480.07 1843.71 1483.17 Q1840.24 1486.25 1833.92 1486.25 Q1831.74 1486.25 1829.48 1485.88 Q1827.23 1485.51 1824.82 1484.77 L1824.82 1480.07 Q1826.91 1481.2 1829.13 1481.76 Q1831.35 1482.32 1833.83 1482.32 Q1837.83 1482.32 1840.17 1480.21 Q1842.51 1478.1 1842.51 1474.49 Q1842.51 1470.88 1840.17 1468.77 Q1837.83 1466.67 1833.83 1466.67 Q1831.95 1466.67 1830.08 1467.08 Q1828.23 1467.5 1826.28 1468.38 L1826.28 1451.02 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1" /><path clip-path="url(#clip790)" d="M2245.39 1481.64 L2253.03 1481.64 L2253.03 1455.28 L2244.72 1456.95 L2244.72 1452.69 L2252.99 1451.02 L2257.66 1451.02 L2257.66 1481.64 L2265.3 1481.64 L2265.3 1485.58 L2245.39 1485.58 L2245.39 1481.64 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1" /><path clip-path="url(#clip790)" d="M2274.75 1479.7 L2279.63 1479.7 L2279.63 1485.58 L2274.75 1485.58 L2274.75 1479.7 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1" /><path clip-path="url(#clip790)" d="M2299.82 1454.1 Q2296.2 1454.1 2294.38 1457.66 Q2292.57 1461.2 2292.57 1468.33 Q2292.57 1475.44 2294.38 1479.01 Q2296.2 1482.55 2299.82 1482.55 Q2303.45 1482.55 2305.25 1479.01 Q2307.08 1475.44 2307.08 1468.33 Q2307.08 1461.2 2305.25 1457.66 Q2303.45 1454.1 2299.82 1454.1 M2299.82 1450.39 Q2305.63 1450.39 2308.68 1455 Q2311.76 1459.58 2311.76 1468.33 Q2311.76 1477.06 2308.68 1481.67 Q2305.63 1486.25 2299.82 1486.25 Q2294.01 1486.25 2290.93 1481.67 Q2287.87 1477.06 2287.87 1468.33 Q2287.87 1459.58 2290.93 1455 Q2294.01 1450.39 2299.82 1450.39 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1" /><path clip-path="url(#clip790)" d="M2329.98 1454.1 Q2326.37 1454.1 2324.54 1457.66 Q2322.73 1461.2 2322.73 1468.33 Q2322.73 1475.44 2324.54 1479.01 Q2326.37 1482.55 2329.98 1482.55 Q2333.61 1482.55 2335.42 1479.01 Q2337.25 1475.44 2337.25 1468.33 Q2337.25 1461.2 2335.42 1457.66 Q2333.61 1454.1 2329.98 1454.1 M2329.98 1450.39 Q2335.79 1450.39 2338.84 1455 Q2341.92 1459.58 2341.92 1468.33 Q2341.92 1477.06 2338.84 1481.67 Q2335.79 1486.25 2329.98 1486.25 Q2324.17 1486.25 2321.09 1481.67 Q2318.03 1477.06 2318.03 1468.33 Q2318.03 1459.58 2321.09 1455 Q2324.17 1450.39 2329.98 1450.39 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1" /><path clip-path="url(#clip790)" d="M851.988 1518.52 L851.988 1523.39 L846.387 1523.39 Q843.235 1523.39 841.994 1524.66 Q840.785 1525.93 840.785 1529.24 L840.785 1532.4 L850.429 1532.4 L850.429 1536.95 L840.785 1536.95 L840.785 1568.04 L834.896 1568.04 L834.896 1536.95 L829.295 1536.95 L829.295 1532.4 L834.896 1532.4 L834.896 1529.91 Q834.896 1523.96 837.665 1521.26 Q840.435 1518.52 846.45 1518.52 L851.988 1518.52 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1" /><path clip-path="url(#clip790)" d="M877.547 1537.87 Q876.56 1537.3 875.382 1537.04 Q874.236 1536.76 872.836 1536.76 Q867.871 1536.76 865.197 1540 Q862.555 1543.22 862.555 1549.27 L862.555 1568.04 L856.667 1568.04 L856.667 1532.4 L862.555 1532.4 L862.555 1537.93 Q864.401 1534.69 867.362 1533.13 Q870.322 1531.54 874.555 1531.54 Q875.159 1531.54 875.892 1531.63 Q876.624 1531.7 877.515 1531.85 L877.547 1537.87 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1" /><path clip-path="url(#clip790)" d="M899.89 1550.12 Q892.793 1550.12 890.055 1551.75 Q887.318 1553.37 887.318 1557.29 Q887.318 1560.4 889.355 1562.25 Q891.424 1564.07 894.957 1564.07 Q899.827 1564.07 902.755 1560.63 Q905.715 1557.16 905.715 1551.43 L905.715 1550.12 L899.89 1550.12 M911.571 1547.71 L911.571 1568.04 L905.715 1568.04 L905.715 1562.63 Q903.71 1565.88 900.718 1567.44 Q897.726 1568.97 893.397 1568.97 Q887.923 1568.97 884.676 1565.91 Q881.462 1562.82 881.462 1557.67 Q881.462 1551.65 885.472 1548.6 Q889.514 1545.54 897.503 1545.54 L905.715 1545.54 L905.715 1544.97 Q905.715 1540.93 903.041 1538.73 Q900.4 1536.5 895.593 1536.5 Q892.538 1536.5 889.641 1537.23 Q886.745 1537.97 884.071 1539.43 L884.071 1534.02 Q887.286 1532.78 890.31 1532.17 Q893.334 1531.54 896.198 1531.54 Q903.932 1531.54 907.752 1535.55 Q911.571 1539.56 911.571 1547.71 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1" /><path clip-path="url(#clip790)" d="M949.288 1533.76 L949.288 1539.24 Q946.806 1537.87 944.291 1537.2 Q941.808 1536.5 939.262 1536.5 Q933.565 1536.5 930.414 1540.13 Q927.263 1543.73 927.263 1550.25 Q927.263 1556.78 930.414 1560.4 Q933.565 1564 939.262 1564 Q941.808 1564 944.291 1563.33 Q946.806 1562.63 949.288 1561.26 L949.288 1566.68 Q946.837 1567.82 944.196 1568.39 Q941.586 1568.97 938.626 1568.97 Q930.573 1568.97 925.831 1563.91 Q921.088 1558.85 921.088 1550.25 Q921.088 1541.53 925.862 1536.53 Q930.668 1531.54 939.008 1531.54 Q941.713 1531.54 944.291 1532.11 Q946.869 1532.65 949.288 1533.76 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1" /><path clip-path="url(#clip790)" d="M965.266 1522.27 L965.266 1532.4 L977.329 1532.4 L977.329 1536.95 L965.266 1536.95 L965.266 1556.3 Q965.266 1560.66 966.444 1561.9 Q967.653 1563.14 971.313 1563.14 L977.329 1563.14 L977.329 1568.04 L971.313 1568.04 Q964.534 1568.04 961.956 1565.53 Q959.378 1562.98 959.378 1556.3 L959.378 1536.95 L955.081 1536.95 L955.081 1532.4 L959.378 1532.4 L959.378 1522.27 L965.266 1522.27 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1" /><path clip-path="url(#clip790)" d="M985.032 1532.4 L990.888 1532.4 L990.888 1568.04 L985.032 1568.04 L985.032 1532.4 M985.032 1518.52 L990.888 1518.52 L990.888 1525.93 L985.032 1525.93 L985.032 1518.52 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1" /><path clip-path="url(#clip790)" d="M1016.96 1536.5 Q1012.24 1536.5 1009.51 1540.19 Q1006.77 1543.85 1006.77 1550.25 Q1006.77 1556.65 1009.48 1560.34 Q1012.21 1564 1016.96 1564 Q1021.63 1564 1024.37 1560.31 Q1027.11 1556.62 1027.11 1550.25 Q1027.11 1543.92 1024.37 1540.23 Q1021.63 1536.5 1016.96 1536.5 M1016.96 1531.54 Q1024.59 1531.54 1028.95 1536.5 Q1033.32 1541.47 1033.32 1550.25 Q1033.32 1559 1028.95 1564 Q1024.59 1568.97 1016.96 1568.97 Q1009.28 1568.97 1004.92 1564 Q1000.6 1559 1000.6 1550.25 Q1000.6 1541.47 1004.92 1536.5 Q1009.28 1531.54 1016.96 1531.54 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1" /><path clip-path="url(#clip790)" d="M1072.66 1546.53 L1072.66 1568.04 L1066.8 1568.04 L1066.8 1546.72 Q1066.8 1541.66 1064.83 1539.14 Q1062.85 1536.63 1058.91 1536.63 Q1054.16 1536.63 1051.43 1539.65 Q1048.69 1542.68 1048.69 1547.9 L1048.69 1568.04 L1042.8 1568.04 L1042.8 1532.4 L1048.69 1532.4 L1048.69 1537.93 Q1050.79 1534.72 1053.62 1533.13 Q1056.49 1531.54 1060.21 1531.54 Q1066.35 1531.54 1069.5 1535.36 Q1072.66 1539.14 1072.66 1546.53 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1" /><path clip-path="url(#clip790)" d="M1100.54 1550.12 Q1093.44 1550.12 1090.7 1551.75 Q1087.97 1553.37 1087.97 1557.29 Q1087.97 1560.4 1090 1562.25 Q1092.07 1564.07 1095.6 1564.07 Q1100.47 1564.07 1103.4 1560.63 Q1106.36 1557.16 1106.36 1551.43 L1106.36 1550.12 L1100.54 1550.12 M1112.22 1547.71 L1112.22 1568.04 L1106.36 1568.04 L1106.36 1562.63 Q1104.36 1565.88 1101.36 1567.44 Q1098.37 1568.97 1094.04 1568.97 Q1088.57 1568.97 1085.32 1565.91 Q1082.11 1562.82 1082.11 1557.67 Q1082.11 1551.65 1086.12 1548.6 Q1090.16 1545.54 1098.15 1545.54 L1106.36 1545.54 L1106.36 1544.97 Q1106.36 1540.93 1103.69 1538.73 Q1101.05 1536.5 1096.24 1536.5 Q1093.18 1536.5 1090.29 1537.23 Q1087.39 1537.97 1084.72 1539.43 L1084.72 1534.02 Q1087.93 1532.78 1090.96 1532.17 Q1093.98 1531.54 1096.85 1531.54 Q1104.58 1531.54 1108.4 1535.55 Q1112.22 1539.56 1112.22 1547.71 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1" /><path clip-path="url(#clip790)" d="M1124.28 1518.52 L1130.14 1518.52 L1130.14 1568.04 L1124.28 1568.04 L1124.28 1518.52 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1" /><path clip-path="url(#clip790)" d="M1193.6 1548.76 L1193.6 1551.62 L1166.68 1551.62 Q1167.06 1557.67 1170.31 1560.85 Q1173.58 1564 1179.41 1564 Q1182.78 1564 1185.93 1563.17 Q1189.12 1562.35 1192.24 1560.69 L1192.24 1566.23 Q1189.08 1567.57 1185.77 1568.27 Q1182.46 1568.97 1179.06 1568.97 Q1170.53 1568.97 1165.53 1564 Q1160.57 1559.04 1160.57 1550.57 Q1160.57 1541.82 1165.28 1536.69 Q1170.02 1531.54 1178.04 1531.54 Q1185.23 1531.54 1189.4 1536.18 Q1193.6 1540.8 1193.6 1548.76 M1187.75 1547.04 Q1187.68 1542.23 1185.04 1539.37 Q1182.43 1536.5 1178.1 1536.5 Q1173.2 1536.5 1170.24 1539.27 Q1167.31 1542.04 1166.87 1547.07 L1187.75 1547.04 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1" /><path clip-path="url(#clip790)" d="M1203.22 1518.52 L1209.07 1518.52 L1209.07 1568.04 L1203.22 1568.04 L1203.22 1518.52 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1" /><path clip-path="url(#clip790)" d="M1251.82 1548.76 L1251.82 1551.62 L1224.89 1551.62 Q1225.27 1557.67 1228.52 1560.85 Q1231.8 1564 1237.62 1564 Q1241 1564 1244.15 1563.17 Q1247.33 1562.35 1250.45 1560.69 L1250.45 1566.23 Q1247.3 1567.57 1243.99 1568.27 Q1240.68 1568.97 1237.27 1568.97 Q1228.74 1568.97 1223.75 1564 Q1218.78 1559.04 1218.78 1550.57 Q1218.78 1541.82 1223.49 1536.69 Q1228.23 1531.54 1236.25 1531.54 Q1243.45 1531.54 1247.62 1536.18 Q1251.82 1540.8 1251.82 1548.76 M1245.96 1547.04 Q1245.9 1542.23 1243.26 1539.37 Q1240.65 1536.5 1236.32 1536.5 Q1231.42 1536.5 1228.46 1539.27 Q1225.53 1542.04 1225.08 1547.07 L1245.96 1547.04 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1" /><path clip-path="url(#clip790)" d="M1289.19 1539.24 Q1291.38 1535.29 1294.44 1533.41 Q1297.49 1531.54 1301.63 1531.54 Q1307.2 1531.54 1310.22 1535.45 Q1313.25 1539.33 1313.25 1546.53 L1313.25 1568.04 L1307.36 1568.04 L1307.36 1546.72 Q1307.36 1541.59 1305.54 1539.11 Q1303.73 1536.63 1300.01 1536.63 Q1295.46 1536.63 1292.81 1539.65 Q1290.17 1542.68 1290.17 1547.9 L1290.17 1568.04 L1284.28 1568.04 L1284.28 1546.72 Q1284.28 1541.56 1282.47 1539.11 Q1280.66 1536.63 1276.87 1536.63 Q1272.38 1536.63 1269.74 1539.68 Q1267.1 1542.71 1267.1 1547.9 L1267.1 1568.04 L1261.21 1568.04 L1261.21 1532.4 L1267.1 1532.4 L1267.1 1537.93 Q1269.1 1534.66 1271.9 1533.1 Q1274.7 1531.54 1278.55 1531.54 Q1282.44 1531.54 1285.14 1533.51 Q1287.88 1535.48 1289.19 1539.24 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1" /><path clip-path="url(#clip790)" d="M1355.42 1548.76 L1355.42 1551.62 L1328.49 1551.62 Q1328.88 1557.67 1332.12 1560.85 Q1335.4 1564 1341.22 1564 Q1344.6 1564 1347.75 1563.17 Q1350.93 1562.35 1354.05 1560.69 L1354.05 1566.23 Q1350.9 1567.57 1347.59 1568.27 Q1344.28 1568.97 1340.87 1568.97 Q1332.34 1568.97 1327.35 1564 Q1322.38 1559.04 1322.38 1550.57 Q1322.38 1541.82 1327.09 1536.69 Q1331.84 1531.54 1339.86 1531.54 Q1347.05 1531.54 1351.22 1536.18 Q1355.42 1540.8 1355.42 1548.76 M1349.56 1547.04 Q1349.5 1542.23 1346.86 1539.37 Q1344.25 1536.5 1339.92 1536.5 Q1335.02 1536.5 1332.06 1539.27 Q1329.13 1542.04 1328.68 1547.07 L1349.56 1547.04 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1" /><path clip-path="url(#clip790)" d="M1394.66 1546.53 L1394.66 1568.04 L1388.81 1568.04 L1388.81 1546.72 Q1388.81 1541.66 1386.83 1539.14 Q1384.86 1536.63 1380.91 1536.63 Q1376.17 1536.63 1373.44 1539.65 Q1370.7 1542.68 1370.7 1547.9 L1370.7 1568.04 L1364.81 1568.04 L1364.81 1532.4 L1370.7 1532.4 L1370.7 1537.93 Q1372.8 1534.72 1375.63 1533.13 Q1378.5 1531.54 1382.22 1531.54 Q1388.36 1531.54 1391.51 1535.36 Q1394.66 1539.14 1394.66 1546.53 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1" /><path clip-path="url(#clip790)" d="M1412.14 1522.27 L1412.14 1532.4 L1424.2 1532.4 L1424.2 1536.95 L1412.14 1536.95 L1412.14 1556.3 Q1412.14 1560.66 1413.32 1561.9 Q1414.53 1563.14 1418.19 1563.14 L1424.2 1563.14 L1424.2 1568.04 L1418.19 1568.04 Q1411.41 1568.04 1408.83 1565.53 Q1406.25 1562.98 1406.25 1556.3 L1406.25 1536.95 L1401.95 1536.95 L1401.95 1532.4 L1406.25 1532.4 L1406.25 1522.27 L1412.14 1522.27 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1" /><path clip-path="url(#clip790)" d="M1454.63 1533.45 L1454.63 1538.98 Q1452.15 1537.71 1449.47 1537.07 Q1446.8 1536.44 1443.94 1536.44 Q1439.57 1536.44 1437.38 1537.77 Q1435.21 1539.11 1435.21 1541.79 Q1435.21 1543.82 1436.77 1545 Q1438.33 1546.15 1443.04 1547.2 L1445.05 1547.64 Q1451.29 1548.98 1453.9 1551.43 Q1456.54 1553.85 1456.54 1558.21 Q1456.54 1563.17 1452.59 1566.07 Q1448.68 1568.97 1441.8 1568.97 Q1438.94 1568.97 1435.82 1568.39 Q1432.73 1567.85 1429.29 1566.74 L1429.29 1560.69 Q1432.54 1562.38 1435.69 1563.24 Q1438.84 1564.07 1441.93 1564.07 Q1446.07 1564.07 1448.3 1562.66 Q1450.52 1561.23 1450.52 1558.65 Q1450.52 1556.27 1448.9 1554.99 Q1447.31 1553.72 1441.87 1552.54 L1439.83 1552.07 Q1434.39 1550.92 1431.97 1548.56 Q1429.55 1546.18 1429.55 1542.04 Q1429.55 1537.01 1433.11 1534.27 Q1436.68 1531.54 1443.24 1531.54 Q1446.48 1531.54 1449.35 1532.01 Q1452.21 1532.49 1454.63 1533.45 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1" /><path clip-path="url(#clip790)" d="M1504.63 1518.52 L1504.63 1523.39 L1499.03 1523.39 Q1495.88 1523.39 1494.64 1524.66 Q1493.43 1525.93 1493.43 1529.24 L1493.43 1532.4 L1503.07 1532.4 L1503.07 1536.95 L1493.43 1536.95 L1493.43 1568.04 L1487.54 1568.04 L1487.54 1536.95 L1481.94 1536.95 L1481.94 1532.4 L1487.54 1532.4 L1487.54 1529.91 Q1487.54 1523.96 1490.31 1521.26 Q1493.08 1518.52 1499.09 1518.52 L1504.63 1518.52 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1" /><path clip-path="url(#clip790)" d="M1530.19 1537.87 Q1529.2 1537.3 1528.03 1537.04 Q1526.88 1536.76 1525.48 1536.76 Q1520.51 1536.76 1517.84 1540 Q1515.2 1543.22 1515.2 1549.27 L1515.2 1568.04 L1509.31 1568.04 L1509.31 1532.4 L1515.2 1532.4 L1515.2 1537.93 Q1517.05 1534.69 1520.01 1533.13 Q1522.97 1531.54 1527.2 1531.54 Q1527.8 1531.54 1528.54 1531.63 Q1529.27 1531.7 1530.16 1531.85 L1530.19 1537.87 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1" /><path clip-path="url(#clip790)" d="M1548.71 1536.5 Q1544 1536.5 1541.27 1540.19 Q1538.53 1543.85 1538.53 1550.25 Q1538.53 1556.65 1541.24 1560.34 Q1543.97 1564 1548.71 1564 Q1553.39 1564 1556.13 1560.31 Q1558.87 1556.62 1558.87 1550.25 Q1558.87 1543.92 1556.13 1540.23 Q1553.39 1536.5 1548.71 1536.5 M1548.71 1531.54 Q1556.35 1531.54 1560.71 1536.5 Q1565.07 1541.47 1565.07 1550.25 Q1565.07 1559 1560.71 1564 Q1556.35 1568.97 1548.71 1568.97 Q1541.04 1568.97 1536.68 1564 Q1532.36 1559 1532.36 1550.25 Q1532.36 1541.47 1536.68 1536.5 Q1541.04 1531.54 1548.71 1531.54 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1" /><path clip-path="url(#clip790)" d="M1602.54 1539.24 Q1604.73 1535.29 1607.79 1533.41 Q1610.84 1531.54 1614.98 1531.54 Q1620.55 1531.54 1623.58 1535.45 Q1626.6 1539.33 1626.6 1546.53 L1626.6 1568.04 L1620.71 1568.04 L1620.71 1546.72 Q1620.71 1541.59 1618.9 1539.11 Q1617.08 1536.63 1613.36 1536.63 Q1608.81 1536.63 1606.17 1539.65 Q1603.52 1542.68 1603.52 1547.9 L1603.52 1568.04 L1597.64 1568.04 L1597.64 1546.72 Q1597.64 1541.56 1595.82 1539.11 Q1594.01 1536.63 1590.22 1536.63 Q1585.73 1536.63 1583.09 1539.68 Q1580.45 1542.71 1580.45 1547.9 L1580.45 1568.04 L1574.56 1568.04 L1574.56 1532.4 L1580.45 1532.4 L1580.45 1537.93 Q1582.45 1534.66 1585.25 1533.1 Q1588.05 1531.54 1591.91 1531.54 Q1595.79 1531.54 1598.49 1533.51 Q1601.23 1535.48 1602.54 1539.24 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1" /><path clip-path="url(#clip790)" d="M1655.6 1532.4 L1661.45 1532.4 L1668.77 1560.21 L1676.06 1532.4 L1682.97 1532.4 L1690.29 1560.21 L1697.58 1532.4 L1703.43 1532.4 L1694.11 1568.04 L1687.2 1568.04 L1679.53 1538.83 L1671.83 1568.04 L1664.92 1568.04 L1655.6 1532.4 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1" /><path clip-path="url(#clip790)" d="M1728.51 1550.12 Q1721.42 1550.12 1718.68 1551.75 Q1715.94 1553.37 1715.94 1557.29 Q1715.94 1560.4 1717.98 1562.25 Q1720.05 1564.07 1723.58 1564.07 Q1728.45 1564.07 1731.38 1560.63 Q1734.34 1557.16 1734.34 1551.43 L1734.34 1550.12 L1728.51 1550.12 M1740.2 1547.71 L1740.2 1568.04 L1734.34 1568.04 L1734.34 1562.63 Q1732.33 1565.88 1729.34 1567.44 Q1726.35 1568.97 1722.02 1568.97 Q1716.55 1568.97 1713.3 1565.91 Q1710.09 1562.82 1710.09 1557.67 Q1710.09 1551.65 1714.1 1548.6 Q1718.14 1545.54 1726.13 1545.54 L1734.34 1545.54 L1734.34 1544.97 Q1734.34 1540.93 1731.67 1538.73 Q1729.02 1536.5 1724.22 1536.5 Q1721.16 1536.5 1718.27 1537.23 Q1715.37 1537.97 1712.7 1539.43 L1712.7 1534.02 Q1715.91 1532.78 1718.93 1532.17 Q1721.96 1531.54 1724.82 1531.54 Q1732.56 1531.54 1736.38 1535.55 Q1740.2 1539.56 1740.2 1547.71 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1" /><path clip-path="url(#clip790)" d="M1752.26 1518.52 L1758.11 1518.52 L1758.11 1568.04 L1752.26 1568.04 L1752.26 1518.52 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1" /><path clip-path="url(#clip790)" d="M1770.37 1518.52 L1776.23 1518.52 L1776.23 1568.04 L1770.37 1568.04 L1770.37 1518.52 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1" /><polyline clip-path="url(#clip792)" style="stroke:#000000; stroke-linecap:round; stroke-linejoin:round; stroke-width:2; stroke-opacity:0.1; fill:none" points="252.764,1175.46 2352.76,1175.46 "/>
+<polyline clip-path="url(#clip792)" style="stroke:#000000; stroke-linecap:round; stroke-linejoin:round; stroke-width:2; stroke-opacity:0.1; fill:none" points="252.764,449.278 2352.76,449.278 "/>
+<polyline clip-path="url(#clip790)" style="stroke:#000000; stroke-linecap:round; stroke-linejoin:round; stroke-width:4; stroke-opacity:1; fill:none" points="252.764,1423.18 252.764,47.2441 "/>
+<polyline clip-path="url(#clip790)" style="stroke:#000000; stroke-linecap:round; stroke-linejoin:round; stroke-width:4; stroke-opacity:1; fill:none" points="252.764,1175.46 271.662,1175.46 "/>
+<polyline clip-path="url(#clip790)" style="stroke:#000000; stroke-linecap:round; stroke-linejoin:round; stroke-width:4; stroke-opacity:1; fill:none" points="252.764,449.278 271.662,449.278 "/>
+<path clip-path="url(#clip790)" d="M114.931 1195.26 L122.57 1195.26 L122.57 1168.89 L114.26 1170.56 L114.26 1166.3 L122.524 1164.63 L127.2 1164.63 L127.2 1195.26 L134.839 1195.26 L134.839 1199.19 L114.931 1199.19 L114.931 1195.26 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1" /><path clip-path="url(#clip790)" d="M154.283 1167.71 Q150.672 1167.71 148.843 1171.27 Q147.038 1174.82 147.038 1181.95 Q147.038 1189.05 148.843 1192.62 Q150.672 1196.16 154.283 1196.16 Q157.917 1196.16 159.723 1192.62 Q161.552 1189.05 161.552 1181.95 Q161.552 1174.82 159.723 1171.27 Q157.917 1167.71 154.283 1167.71 M154.283 1164.01 Q160.093 1164.01 163.149 1168.61 Q166.227 1173.2 166.227 1181.95 Q166.227 1190.67 163.149 1195.28 Q160.093 1199.86 154.283 1199.86 Q148.473 1199.86 145.394 1195.28 Q142.339 1190.67 142.339 1181.95 Q142.339 1173.2 145.394 1168.61 Q148.473 1164.01 154.283 1164.01 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1" /><path clip-path="url(#clip790)" d="M166.227 1158.11 L190.339 1158.11 L190.339 1161.3 L166.227 1161.3 L166.227 1158.11 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1" /><path clip-path="url(#clip790)" d="M208.978 1147.01 L199.386 1162 L208.978 1162 L208.978 1147.01 M207.981 1143.7 L212.758 1143.7 L212.758 1162 L216.764 1162 L216.764 1165.16 L212.758 1165.16 L212.758 1171.78 L208.978 1171.78 L208.978 1165.16 L196.301 1165.16 L196.301 1161.49 L207.981 1143.7 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1" /><path clip-path="url(#clip790)" d="M116.624 469.07 L124.263 469.07 L124.263 442.705 L115.953 444.372 L115.953 440.112 L124.217 438.446 L128.893 438.446 L128.893 469.07 L136.531 469.07 L136.531 473.006 L116.624 473.006 L116.624 469.07 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1" /><path clip-path="url(#clip790)" d="M155.976 441.524 Q152.365 441.524 150.536 445.089 Q148.73 448.631 148.73 455.76 Q148.73 462.867 150.536 466.432 Q152.365 469.973 155.976 469.973 Q159.61 469.973 161.416 466.432 Q163.244 462.867 163.244 455.76 Q163.244 448.631 161.416 445.089 Q159.61 441.524 155.976 441.524 M155.976 437.821 Q161.786 437.821 164.841 442.427 Q167.92 447.01 167.92 455.76 Q167.92 464.487 164.841 469.094 Q161.786 473.677 155.976 473.677 Q150.166 473.677 147.087 469.094 Q144.031 464.487 144.031 455.76 Q144.031 447.01 147.087 442.427 Q150.166 437.821 155.976 437.821 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1" /><path clip-path="url(#clip790)" d="M167.92 431.922 L192.032 431.922 L192.032 435.119 L167.92 435.119 L167.92 431.922 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1" /><path clip-path="url(#clip790)" d="M203.504 442.398 L216.764 442.398 L216.764 445.595 L198.934 445.595 L198.934 442.398 Q201.097 440.16 204.821 436.398 Q208.564 432.618 209.523 431.527 Q211.347 429.477 212.062 428.066 Q212.796 426.637 212.796 425.264 Q212.796 423.026 211.216 421.615 Q209.655 420.205 207.134 420.205 Q205.348 420.205 203.354 420.825 Q201.379 421.446 199.122 422.706 L199.122 418.869 Q201.417 417.948 203.41 417.478 Q205.404 417.007 207.059 417.007 Q211.423 417.007 214.018 419.189 Q216.613 421.371 216.613 425.02 Q216.613 426.75 215.955 428.311 Q215.316 429.853 213.604 431.96 Q213.134 432.505 210.614 435.119 Q208.094 437.715 203.504 442.398 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1" /><path clip-path="url(#clip790)" d="M62.6087 721.649 Q62.8664 721.649 63.8647 721.939 Q64.8631 722.229 66.409 722.937 Q67.9549 723.614 69.3719 724.548 Q70.7568 725.482 71.7874 727.028 Q72.7858 728.541 72.7858 730.28 Q72.7858 732.599 71.2399 734.145 Q69.694 735.691 67.3752 735.691 Q67.0531 735.691 66.7311 735.659 Q66.409 735.627 66.2158 735.594 Q65.9903 735.562 65.6361 735.466 Q65.2496 735.337 65.0886 735.305 Q64.9275 735.24 64.4444 735.079 Q63.9292 734.886 63.7359 734.821 Q53.3012 730.731 48.9534 730.731 Q44.348 730.731 44.348 734.306 Q44.348 737.495 46.6668 740.651 Q47.8262 742.1 49.8874 743.485 Q51.9486 744.87 52.7215 745.127 Q54.3962 745.417 55.6845 745.836 Q56.5862 746.029 60.0967 746.963 L66.0547 748.412 L71.0467 749.668 Q71.7552 749.926 72.2705 750.635 Q72.7858 751.343 72.7858 752.116 Q72.7858 752.76 72.3349 753.404 Q71.9162 754.016 70.9178 754.016 Q70.4025 754.016 69.4686 753.758 L31.4656 744.193 L30.1774 744 Q29.7909 744 29.5977 744.161 Q29.3723 744.29 29.2112 745.063 Q29.0502 745.804 29.0502 747.285 Q29.0502 747.897 29.018 748.187 Q28.9858 748.445 28.8248 748.67 Q28.6315 748.895 28.2451 748.895 Q27.6976 748.895 27.4077 748.67 Q27.0857 748.412 27.0212 748.219 Q26.9568 748.026 26.9246 747.639 Q26.8924 747.092 26.7314 745.256 Q26.5382 743.42 26.4093 741.842 Q26.2805 740.264 26.2805 739.588 Q26.2805 739.201 26.4737 739.008 Q26.6348 738.783 26.828 738.751 L26.989 738.718 L47.955 743.871 Q42.8987 739.781 42.8987 734.113 Q42.8987 730.441 44.7989 728.477 Q46.6668 726.512 49.9518 726.512 Q53.7199 726.512 64.4444 730.538 Q67.4396 731.73 69.1465 731.73 Q70.2737 731.73 70.789 731.375 Q71.3043 730.989 71.3043 730.152 Q71.3043 728.863 70.5636 727.736 Q69.7906 726.577 68.5346 725.772 Q67.2464 724.966 65.9581 724.419 Q64.6377 723.839 63.1562 723.421 Q62.3511 723.163 62.1578 723.034 Q61.9646 722.873 61.9646 722.422 Q61.9646 721.649 62.6087 721.649 Z" fill="#000000" fill-rule="nonzero" fill-opacity="1" /><polyline clip-path="url(#clip792)" style="stroke:#009af9; stroke-linecap:round; stroke-linejoin:round; stroke-width:12; stroke-opacity:1; fill:none" points="312.198,1384.24 322.103,1376.54 332.009,1368.85 341.915,1361.16 351.82,1353.46 361.726,1345.77 371.631,1338.08 381.537,1330.38 391.443,1322.69 401.348,1315 411.254,1307.3 421.16,1299.61 431.065,1291.91 440.971,1284.22 450.876,1276.53 460.782,1268.83 470.688,1261.14 480.593,1253.45 490.499,1245.75 500.405,1238.06 510.31,1230.36 520.216,1222.67 530.121,1214.98 540.027,1207.28 549.933,1199.59 559.838,1191.9 569.744,1184.2 579.649,1176.51 589.555,1168.82 599.461,1161.12 609.366,1153.43 619.272,1145.73 629.178,1138.04 639.083,1130.35 648.989,1122.65 658.894,1114.96 668.8,1107.27 678.706,1099.57 688.611,1091.88 698.517,1084.19 708.423,1076.49 718.328,1068.8 728.234,1061.1 738.139,1053.41 748.045,1045.72 757.951,1038.02 767.856,1030.33 777.762,1022.64 787.668,1014.94 797.573,1007.25 807.479,999.555 817.384,991.861 827.29,984.167 837.196,976.474 847.101,968.78 857.007,961.086 866.913,953.393 876.818,945.699 886.724,938.005 896.629,930.312 906.535,922.618 916.441,914.924 926.346,907.231 936.252,899.537 946.158,891.843 956.063,884.15 965.969,876.456 975.874,868.762 985.78,861.068 995.686,853.375 1005.59,845.681 1015.5,837.987 1025.4,830.294 1035.31,822.6 1045.21,814.906 1055.12,807.213 1065.02,799.519 1074.93,791.825 1084.84,784.132 1094.74,776.438 1104.65,768.744 1114.55,761.051 1124.46,753.357 1134.36,745.663 1144.27,737.97 1154.18,730.276 1164.08,722.582 1173.99,714.889 1183.89,707.195 1193.8,699.501 1203.7,691.808 1213.61,684.114 1223.51,676.42 1233.42,668.727 1243.33,661.033 1253.23,658.054 1263.14,658.054 1273.04,658.054 1282.95,658.054 1292.85,658.054 1302.76,658.054 1312.67,658.054 1322.57,658.054 1332.48,658.054 1342.38,658.054 1352.29,658.054 1362.19,658.054 1372.1,658.054 1382,658.054 1391.91,658.054 1401.82,658.054 1411.72,658.054 1421.63,658.054 1431.53,658.054 1441.44,658.054 1451.34,658.054 1461.25,658.054 1471.16,658.054 1481.06,658.054 1490.97,658.054 1500.87,658.054 1510.78,658.054 1520.68,658.054 1530.59,658.054 1540.49,658.054 1550.4,658.054 1560.31,658.054 1570.21,658.054 1580.12,658.054 1590.02,658.054 1599.93,658.054 1609.83,658.054 1619.74,658.054 1629.65,658.054 1639.55,658.054 1649.46,658.054 1659.36,658.054 1669.27,658.054 1679.17,658.054 1689.08,658.054 1698.98,658.054 1708.89,658.054 1718.8,658.054 1728.7,658.054 1738.61,658.054 1748.51,658.054 1758.42,658.054 1768.32,658.054 1778.23,658.054 1788.14,658.054 1798.04,658.054 1807.95,658.054 1817.85,658.054 1827.76,658.054 1837.66,629.303 1847.57,600.553 1857.47,571.803 1867.38,543.053 1877.29,514.303 1887.19,485.553 1897.1,456.803 1907,428.053 1916.91,399.303 1926.81,370.552 1936.72,341.802 1946.63,313.052 1956.53,284.302 1966.44,255.552 1976.34,226.802 1986.25,198.052 1996.15,169.302 2006.06,140.552 2015.96,111.801 2025.87,86.1857 2035.78,86.1857 2045.68,86.1857 2055.59,86.1857 2065.49,86.1857 2075.4,86.1857 2085.3,86.1857 2095.21,86.1857 2105.12,86.1857 2115.02,86.1857 2124.93,86.1857 2134.83,86.1857 2144.74,86.1857 2154.64,86.1857 2164.55,86.1857 2174.45,86.1857 2184.36,86.1857 2194.27,86.1857 2204.17,86.1857 2214.08,86.1857 2223.98,86.1857 2233.89,86.1857 2243.79,86.1857 2253.7,86.1857 2263.61,86.1857 2273.51,86.1857 2283.42,86.1857 2293.32,86.1857 "/>
+<polyline clip-path="url(#clip792)" style="stroke:#e26f46; stroke-linecap:round; stroke-linejoin:round; stroke-width:12; stroke-opacity:1; fill:none" points="312.198,1384.24 325.096,1374.22 444.358,1281.59 516.03,1225.92 576.628,1178.86 642.454,1127.73 703.139,1080.59 768.201,1030.06 843.581,971.514 910.57,919.484 969.313,873.858 1033.36,824.114 1097.79,774.074 1133.4,746.411 1169.02,718.748 1202.91,692.428 1236.79,666.107 1307.26,658.054 1366.58,658.054 1439.01,658.054 1505.35,658.054 1566.63,658.054 1628.7,658.054 1698.26,658.054 1761.3,658.054 1779.34,658.054 1797.38,658.054 1806.4,658.054 1815.43,658.054 1824.45,658.054 1833.47,642.077 1841.82,617.834 1850.17,593.59 1858.53,569.346 1866.88,545.103 1875.23,520.859 1883.59,496.615 1891.94,472.371 1900.29,448.128 1904.41,436.177 1908.53,424.226 1912.64,412.276 1916.76,400.325 1920.88,388.374 1925,376.423 1929.12,364.473 1933.23,352.522 1937.35,340.571 1941.47,328.62 1945.59,316.67 1949.7,304.719 1953.82,292.768 1957.94,280.818 1962.06,268.867 1966.17,256.916 1970.17,245.313 1974.17,233.71 1978.17,222.107 1982.16,210.503 1984.16,204.702 1986.16,198.9 1988.16,193.099 1990.16,187.297 1992.16,181.495 1994.16,175.694 1996.16,169.892 1998.16,164.091 2000.15,158.289 2002.15,152.488 2004.15,146.686 2006.15,140.884 2008.15,135.083 2010.15,129.281 2012.15,123.48 2014.15,117.678 2016.15,111.876 2018.14,106.075 2020.14,100.273 2022.14,94.4717 2023.14,91.5709 2024.14,88.6701 2024.64,87.2197 2025.14,86.1857 2025.64,86.1857 2026.14,86.1857 2027.14,86.1857 2028.14,86.1857 2029.14,86.1857 2030.14,86.1857 2034.24,86.1857 2038.33,86.1857 2042.43,86.1857 2046.53,86.1857 2054.73,86.1857 2062.92,86.1857 2079.32,86.1857 2095.71,86.1857 2131.63,86.1857 2167.55,86.1857 2219.73,86.1857 2271.91,86.1857 2282.62,86.1857 2293.32,86.1857 "/>
+</svg>
+</div></div>
+</div>
+<ul class="simple">
+<li><p>Geometric spacing near the wall</p>
+<ul>
+<li><p>Aspect ratio <span class="math notranslate nohighlight">\(10\)</span> to <span class="math notranslate nohighlight">\(10^5\)</span></p></li>
+<li><p>Wall-resolved or wall-modeled</p></li>
+</ul>
+</li>
+<li><p>Turbulent boundary layer</p></li>
+<li><p>Far field</p></li>
+<li><p>In unstructured CFD, most elements are close to a wall.</p></li>
+</ul>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="running-on-alpine">
+<h1>Running on Alpine<a class="headerlink" href="#running-on-alpine" title="Permalink to this heading">#</a></h1>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>ssh<span class="w"> </span>login.rc.colorado.edu
+<span class="go">rc$ module load slurm/alpine</span>
+<span class="go">rc$ acompile</span>
+<span class="go">acompile$ . /projects/jeka2967/activate.bash</span>
+</pre></div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git<span class="w"> </span>clone<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>https://github.com/CEED/libCEED
+<span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>libCEED
+<span class="gp">$ </span>make<span class="w"> </span>build/fluids-navierstokes
+<span class="gp">$ </span>mpiexec<span class="w"> </span>-n<span class="w"> </span><span class="m">1</span><span class="w"> </span>build/fluids-navierstokes<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-options_file<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>examples/fluids/gaussianwave.yaml
+</pre></div>
+</div>
+<section id="running-in-docker">
+<h2>Running in Docker<a class="headerlink" href="#running-in-docker" title="Permalink to this heading">#</a></h2>
+<p>Clone the <code class="docutils literal notranslate"><span class="pre">libCEED</span></code> repository and <code class="docutils literal notranslate"><span class="pre">cd</span> <span class="pre">libCEED</span></code></p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">host$ docker run -it --rm -v $(pwd):/work registry.gitlab.com/micromorph/ratel</span>
+<span class="gp">$ </span>make<span class="w"> </span>build/fluids-navierstokes
+<span class="gp">$ </span>mpiexec<span class="w"> </span>-n<span class="w"> </span><span class="m">2</span><span class="w"> </span>build/fluids-navierstokes<span class="w"> </span>-options_file<span class="w"> </span>FILE.yaml
+</pre></div>
+</div>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="vortex-shedding">
+<h1>Vortex shedding<a class="headerlink" href="#vortex-shedding" title="Permalink to this heading">#</a></h1>
+<section id="problem-setup">
+<h2>Problem setup<a class="headerlink" href="#problem-setup" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">examples/fluids/vortexshedding.yaml</span></code></p></li>
+<li><p>Mach 0.01</p></li>
+<li><p>Reynolds 100</p></li>
+</ul>
+<img alt="../_images/vortexshedding.png" src="../_images/vortexshedding.png" />
+<video src="../img/cyl-vorticity.webm" loop controls /></section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "cu-numpde/fall23",
+            ref: "main",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "julia-1.9"
+        },
+        kernelOptions: {
+            name: "julia-1.9",
+            path: "./slides"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'julia-1.9'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="2023-11-27-fe-compressible.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">2023-11-27 FE for Compressible flow</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="2023-12-01-finite-volume.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">2023-12-01 Finite Volume</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">2023-11-29 CEED Fluids</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#last-time">Last time</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#today">Today</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#conservation-of-mass-momentum-and-energy">Conservation of mass, momentum, and energy</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#choice-of-variables">Choice of variables</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#acoustic-wave-speed">Acoustic wave speed</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mach-number">Mach number</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#primitive-variables">Primitive variables</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#blasius-profile-thanks-leila-ghaffari">Blasius profile (thanks, Leila Ghaffari)</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#stabilization">Stabilization</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#time-integration">Time integration</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#boundary-conditions-ref-mengaldo-et-al-2014">Boundary conditions (ref: Mengaldo et al (2014))</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#boundary-conditions">Boundary conditions</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#symmetry-free-slip">Symmetry (free slip)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#wall-no-slip">Wall (no-slip)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#freestream-boundaries">Freestream boundaries</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#viscous-inflow">Viscous inflow</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#viscous-outflow">Viscous outflow</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#convergence-to-steady-state-from-mengaldo">Convergence to steady state (from Mengaldo)</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#freestream-wave-test-problem">Freestream wave test problem</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hll">HLL</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hllc">HLLC</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#open-problem">Open Problem:</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#turbulent-viscous-inflow-and-outflow-with-non-reflecting-boundary-conditions">Turbulent viscous inflow and outflow with non-reflecting boundary conditions.</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#boundary-layers-for-turbulent-flow">Boundary layers for turbulent flow</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#running-on-alpine">Running on Alpine</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#running-in-docker">Running in Docker</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#vortex-shedding">Vortex shedding</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#problem-setup">Problem setup</a></li>
+</ul>
+</li>
+</ul>
+
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Jed Brown
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

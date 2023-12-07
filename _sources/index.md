@@ -5,7 +5,7 @@ Welcome to **CSCI-5636: Numerical Solution of Partial Differential Equations**
 :::{admonition} Logistics
 * Meeting Time: MWF 1:25-2:15pm in ECCS 1B14
 * Office hours: [Choose a time](https://app.simplymeet.me/jed/numpde)
-* [Join in Zoom](https://cuboulder.zoom.us/j/92542412498)
+* [Join in Zoom](https://cuboulder.zoom.us/j/91936219432)
 * [Canvas page](https://canvas.colorado.edu/courses/98101)
   * Please accept the Zulip invite on Canvas 
 :::

@@ -1,0 +1,1518 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>2023-11-13 Ratel for Solid Mechanics &#8212; Numerical Solution of Partial Differential Equations</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'slides/2023-11-13-ratel';</script>
+    <link rel="shortcut icon" href="../_static/cu-numpde-square.svg"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="2023-11-17 Ratel Hands-on" href="2023-11-17-ratel-hands-on.html" />
+    <link rel="prev" title="2023-11-06 Solid Mechanics" href="2023-11-06-solids.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/cu-numpde.svg" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="../_static/cu-numpde.svg" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    Welcome
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../syllabus.html">Syllabus</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../slides.html">Slides</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="2023-08-28-first-day.html">2023-08-28 First Day</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-08-30-finite-differences.html">2023-08-30 Finite Differences</a></li>
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-09-01-fd-solutions.html">2023-09-01 FD Solutions</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-09-06-fd-verification.html">2023-09-06 FD Verification</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-09-08-fourier.html">2023-09-08 Fourier and conditioning</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-09-11-chebyshev.html">2023-09-11 Chebyshev collocation</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-09-13-coefficients.html">2023-09-13 Variable coefficients</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-09-15-advection.html">2023-09-15 Advection</a></li>
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-09-18-sparsity.html">2023-09-18 Sparsity and solvers</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-09-20-nonlinear.html">2023-09-20 Nonlinear solvers</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-09-22-differentiation.html">2023-09-22 Differentiation</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-09-25-blasius.html">2023-09-25 Blasius</a></li>
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-09-27-transient.html">2023-09-27 Transient Intro</a></li>
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-09-29-transient.html">2023-09-29 Transient</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-10-02-stiffness.html">2023-10-02 Stiffness</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-10-04-runge-kutta.html">2023-10-04 Runge-Kutta</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-10-06-2d.html">2023-10-06 2D Advection-diffusion and waves</a></li>
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-10-09-factorization.html">2023-10-09 Factorization</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-10-11-linear-solvers.html">2023-10-13 Linear Solvers</a></li>
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-10-13-iterative.html">2023-10-16 Iterative Solvers</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-10-18-krylov.html">2023-10-18 Krylov and preconditioning</a></li>
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-10-20-preconditioning.html">2023-10-20 Preconditioning</a></li>
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-10-25-multigrid.html">2023-10-25 Multigrid</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-10-27-amg.html">2023-10-27 AMG</a></li>
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-10-30-galerkin.html">2023-10-30 Galerkin methods</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-11-01-fem.html">2023-11-01 Finite Elements</a></li>
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-11-03-applied-fe.html">2023-11-03 Applied Finite Elements</a></li>
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-11-06-solids.html">2023-11-06 Solid Mechanics</a></li>
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">2023-11-13 Ratel for Solid Mechanics</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-11-17-ratel-hands-on.html">2023-11-17 Ratel Hands-on</a></li>
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-11-27-fe-compressible.html">2023-11-27 FE for Compressible flow</a></li>
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-11-29-ceed-fluids.html">2023-11-29 CEED Fluids</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-12-01-finite-volume.html">2023-12-01 Finite Volume</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-12-04-reconstruction.html">2023-12-04 Reconstruction</a></li>
+
+
+
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="2023-12-06-systems.html">2023-12-06 Systems</a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</ul>
+</li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li>
+<button onclick="initThebeSBT()"
+  class="btn btn-sm btn-launch-thebe dropdown-item"
+  title="Launch Thebe"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-play"></i>
+  </span>
+<span class="btn__text-container">Live Code</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/cu-numpde/fall23" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/cu-numpde/fall23/issues/new?title=Issue%20on%20page%20%2Fslides/2023-11-13-ratel.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/slides/2023-11-13-ratel.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>2023-11-13 Ratel for Solid Mechanics</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">2023-11-13 Ratel for Solid Mechanics</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#last-time">Last time</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#today">Today</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#solid-mechanics-ratel-theory-guide">Solid mechanics: Ratel Theory Guide</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#material-coordinates">Material coordinates</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conservation">Conservation</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mass-by-definition-of-density">Mass by definition of density</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#momentum-by-equations-we-solve">Momentum by equations we solve</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#angular-momentum-by-symmetry-of-stress-and-strain-tensors">Angular momentum by symmetry of stress and strain tensors</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#momentum-balance-in-initial-configuration">Momentum balance in initial configuration</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#strain-measures">Strain measures</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#neo-hookean-model">Neo-Hookean model</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#nonlinear-solid-mechanics">Nonlinear solid mechanics</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#industrial-state-of-practice">Industrial state of practice</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#myths">Myths</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#industrial-models-are-riddled-with-singularities">Industrial models are riddled with singularities</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#the-mathematician-s-way-hp-adaptive-finite-elements">The mathematician’s way: <span class="math notranslate nohighlight">\(hp\)</span> adaptive finite elements</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#how-does-it-work">How does it work?</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#what-meshes-do-engineers-use">What meshes do engineers use?</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#approximation-constants-are-good-for-high-order">Approximation constants are good for high order</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#spurious-stress-singularities">Spurious stress singularities</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#why-matrix-free">Why matrix-free?</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#matrix-free-is-faster-for-q-1-elements">Matrix-free is faster for <span class="math notranslate nohighlight">\(Q_1\)</span> elements</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#p-multigrid-algorithm-and-cost-breakdown"><span class="math notranslate nohighlight">\(p\)</span>-multigrid algorithm and cost breakdown</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#nonlinear-solve-efficiency">Nonlinear solve efficiency</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#q-2-elements"><span class="math notranslate nohighlight">\(Q_2\)</span> elements</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#q-3-elements"><span class="math notranslate nohighlight">\(Q_3\)</span> elements</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#linear-solve-efficiency">Linear solve efficiency</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1"><span class="math notranslate nohighlight">\(Q_2\)</span> elements</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2"><span class="math notranslate nohighlight">\(Q_3\)</span> elements</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#preconditioner-setup-efficiency">Preconditioner setup efficiency</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id3"><span class="math notranslate nohighlight">\(Q_2\)</span> elements</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id4"><span class="math notranslate nohighlight">\(Q_3\)</span> elements</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#one-node-of-crusher-vs-historical-gordon-bell">One node of Crusher vs historical Gordon Bell</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mdof-q-2-elements-nonlinear-analysis-in-seconds">184 MDoF <span class="math notranslate nohighlight">\(Q_2\)</span> elements nonlinear analysis in seconds</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gordon-bell-bhardwaj-et-al">2002 Gordon Bell (Bhardwaj et al)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gordon-bell-adams-et-al">2004 Gordon Bell (Adams et al)</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#old-performance-model">Old performance model</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#iterative-solvers-bandwidth">Iterative solvers: Bandwidth</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#direct-solvers-bandwidth-and-dense-compute">Direct solvers: Bandwidth and Dense compute</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#new-performance-model">New performance model</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#still-mostly-bandwidth">Still mostly bandwidth</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compute">Compute</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#solids-efficient-matrix-free-jacobians">Solids: efficient matrix-free Jacobians</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cf-davydov-et-al-2020">cf. Davydov et al. (2020)</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#stable-formulations-for-large-deformation-solid-mechanics">Stable formulations for large-deformation solid mechanics</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#textbook-approach">Textbook approach</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stable-approach">Stable approach</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#outlook-https-ratel-micromorph-org">Outlook: https://ratel.micromorph.org</a></li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="ratel-for-solid-mechanics">
+<h1>2023-11-13 Ratel for Solid Mechanics<a class="headerlink" href="#ratel-for-solid-mechanics" title="Permalink to this heading">#</a></h1>
+<section id="last-time">
+<h2>Last time<a class="headerlink" href="#last-time" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Stabilized methods</p></li>
+<li><p>Dispersion diagrams</p></li>
+<li><p>Mixed finite elements</p></li>
+</ul>
+</section>
+<section id="today">
+<h2>Today<a class="headerlink" href="#today" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Intro to solid mechanics, Ratel</p></li>
+<li><p>Singularities and <span class="math notranslate nohighlight">\(hp\)</span> adaptivity</p></li>
+<li><p>Cost of sparse matrices</p></li>
+<li><p>GPU performance with Ratel and context</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="n">Plots</span>
+<span class="n">default</span><span class="p">(</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="k">using</span><span class="w"> </span><span class="n">LinearAlgebra</span>
+<span class="k">using</span><span class="w"> </span><span class="n">SparseArrays</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="solid-mechanics-ratel-theory-guide">
+<h1>Solid mechanics: <a class="reference external" href="https://ratel.micromorph.org/doc/modeling/continuum-mechanics/balance-laws/">Ratel Theory Guide</a><a class="headerlink" href="#solid-mechanics-ratel-theory-guide" title="Permalink to this heading">#</a></h1>
+<section id="material-coordinates">
+<h2>Material coordinates<a class="headerlink" href="#material-coordinates" title="Permalink to this heading">#</a></h2>
+<p>The current configuration <span class="math notranslate nohighlight">\(x\)</span> is a function of the initial configuration <span class="math notranslate nohighlight">\(X\)</span>. We typically solve for displacement <span class="math notranslate nohighlight">\(u = x - X\)</span>, and define the <strong>deformation gradient</strong>
+<div class="math notranslate nohighlight">
+\[ F = \frac{\partial x}{\partial X} = I + \underbrace{\frac{\partial u}{\partial 
+X}}_H\]</div>
+
+where <span class="math notranslate nohighlight">\(H\)</span> is known as <strong>displacement gradient</strong>.</p>
+</section>
+<section id="conservation">
+<h2>Conservation<a class="headerlink" href="#conservation" title="Permalink to this heading">#</a></h2>
+<section id="mass-by-definition-of-density">
+<h3>Mass by definition of density<a class="headerlink" href="#mass-by-definition-of-density" title="Permalink to this heading">#</a></h3>
+</section>
+<section id="momentum-by-equations-we-solve">
+<h3>Momentum by equations we solve<a class="headerlink" href="#momentum-by-equations-we-solve" title="Permalink to this heading">#</a></h3>
+</section>
+<section id="angular-momentum-by-symmetry-of-stress-and-strain-tensors">
+<h3>Angular momentum by symmetry of stress and strain tensors<a class="headerlink" href="#angular-momentum-by-symmetry-of-stress-and-strain-tensors" title="Permalink to this heading">#</a></h3>
+</section>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="momentum-balance-in-initial-configuration">
+<h1>Momentum balance in initial configuration<a class="headerlink" href="#momentum-balance-in-initial-configuration" title="Permalink to this heading">#</a></h1>
+<div class="math notranslate nohighlight">
+\[\nabla\cdot \mathbf F \mathbf S = 0\]</div>
+<p>where <span class="math notranslate nohighlight">\(\mathbf F = I + H\)</span> and <span class="math notranslate nohighlight">\(\mathbf S\)</span> is the symmetric stress tensor (Second Piola-Kirchhoff tensor).</p>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="strain-measures">
+<h1>Strain measures<a class="headerlink" href="#strain-measures" title="Permalink to this heading">#</a></h1>
+<p>Stress <span class="math notranslate nohighlight">\(\mathbf S\)</span> must be defined as a function of displacement. A common choice is to define the <strong>right Cauchy-Green tensor</strong></p>
+<div class="math notranslate nohighlight">
+\[ C = F^T F\]</div>
+<p>This has value <span class="math notranslate nohighlight">\(I\)</span> for zero strain. A better formulation uses</p>
+<div class="math notranslate nohighlight">
+\[ E = \frac 1 2 (C - I) = \underbrace{\frac 1 2 (H + H^T + H^T H)}_{\text{stable}}\]</div>
+<section id="neo-hookean-model">
+<h2><a class="reference external" href="https://ratel.micromorph.org/doc/modeling/models/neo-hookean/">Neo-Hookean model</a><a class="headerlink" href="#neo-hookean-model" title="Permalink to this heading">#</a></h2>
+<p>Strain energy density
+\begin{aligned}
+\psi \left(\mathbf{E} \right) &amp;= \frac{\lambda}{2} \left( \log J \right)^2 - \mu \log J + \frac \mu 2 \left( \operatorname{trace} \mathbf{C} - 3 \right) \
+&amp;= \frac{\lambda}{2} \left( \log J \right)^2 - \mu \log J + \mu \operatorname{trace} \mathbf{E},
+\end{aligned}</p>
+<div class="math notranslate nohighlight">
+\[\mathbf S = \frac{\partial \psi}{\partial \mathbf E}\]</div>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="nonlinear-solid-mechanics">
+<h1>Nonlinear solid mechanics<a class="headerlink" href="#nonlinear-solid-mechanics" title="Permalink to this heading">#</a></h1>
+<video src="../img/schwarz-q2-5x5x5-t20-l2-r2.webm" width="90%" autoplay controls loop /><section id="industrial-state-of-practice">
+<h2>Industrial state of practice<a class="headerlink" href="#industrial-state-of-practice" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Low order finite elements: <span class="math notranslate nohighlight">\(Q_1\)</span> (trilinear) hexahedra, <span class="math notranslate nohighlight">\(P_2\)</span> (quadratic) tetrahedra.</p></li>
+<li><p>Assembled matrices, sparse direct and algebraic multigrid solvers</p></li>
+</ul>
+</section>
+<section id="myths">
+<h2>Myths<a class="headerlink" href="#myths" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p>High order doesn’t help because real problems have singularities.</p></li>
+<li><p>Matrix-free methods are just for high order problems</p></li>
+</ul>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="industrial-models-are-riddled-with-singularities">
+<h1>Industrial models are riddled with singularities<a class="headerlink" href="#industrial-models-are-riddled-with-singularities" title="Permalink to this heading">#</a></h1>
+<img alt="../_images/gordon-bell-2004-structure.png" src="../_images/gordon-bell-2004-structure.png" />
+<ul class="simple">
+<li><p>Every reentrant corner</p></li>
+<li><p>Every Dirichlet (fixed/clamped) to Neumann boundary transitien</p></li>
+</ul>
+<p>(From Bhardwaj et al, 2002.)</p>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="the-mathematician-s-way-hp-adaptive-finite-elements">
+<h1>The mathematician’s way: <span class="math notranslate nohighlight">\(hp\)</span> adaptive finite elements<a class="headerlink" href="#the-mathematician-s-way-hp-adaptive-finite-elements" title="Permalink to this heading">#</a></h1>
+<p>Elliptic PDE always have singularities at reentrant corners (and Dirichlet to Neumann boundary transitions).</p>
+<a class="reference internal image-reference" href="https://www.dealii.org/images/steps/developer/step-27-solution.png"><img alt="https://www.dealii.org/images/steps/developer/step-27-solution.png" src="https://www.dealii.org/images/steps/developer/step-27-solution.png" style="width: 80%;" /></a>
+<p><img alt="" src="../_images/DemkowiczRachowiczDevloo-hp-loglog-2002.png" />
+<img alt="" src="../_images/DemkowiczRachowiczDevloo-hp-loglin-2002.png" /></p>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="how-does-it-work">
+<h1>How does it work?<a class="headerlink" href="#how-does-it-work" title="Permalink to this heading">#</a></h1>
+<p>High order to resolve when solution is smooth, tiny low-order elements near singularities.</p>
+<p><img alt="Deal.II hp refinement" src="../_images/dealii-hp-refinement.png" /></p>
+<p>(<a class="reference external" href="https://dealii.org/developer/doxygen/deal.II/step_27.html">source: Deal.II step 27</a>)</p>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="what-meshes-do-engineers-use">
+<h1>What meshes do engineers use?<a class="headerlink" href="#what-meshes-do-engineers-use" title="Permalink to this heading">#</a></h1>
+<a class="reference internal image-reference" href="https://images.ansys.com/is/image/ansys/fundamentals-of-fea-meshing-cages-motorcycle-pump?&amp;wid=866&amp;op_usm=0.9,1.0,20,0&amp;fit=constrain,0"><img alt="https://images.ansys.com/is/image/ansys/fundamentals-of-fea-meshing-cages-motorcycle-pump?&amp;wid=866&amp;op_usm=0.9,1.0,20,0&amp;fit=constrain,0" src="https://images.ansys.com/is/image/ansys/fundamentals-of-fea-meshing-cages-motorcycle-pump?&amp;wid=866&amp;op_usm=0.9,1.0,20,0&amp;fit=constrain,0" style="width: 100%;" /></a>
+<p><a class="reference external" href="https://www.ansys.com/blog/fundamentals-of-fea-meshing-for-structural-analysis">source: Ansys blog</a></p>
+<video src="../img/one-hole-traction-20220222.webm" autoplay controls loop /></section>
+<section class="tex2jax_ignore mathjax_ignore" id="approximation-constants-are-good-for-high-order">
+<h1>Approximation constants are good for high order<a class="headerlink" href="#approximation-constants-are-good-for-high-order" title="Permalink to this heading">#</a></h1>
+<a class="reference internal image-reference" href="../_images/accuracy_study_annotated.svg"><img alt="../_images/accuracy_study_annotated.svg" src="../_images/accuracy_study_annotated.svg" width="85%" /></a>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="spurious-stress-singularities">
+<h1>Spurious stress singularities<a class="headerlink" href="#spurious-stress-singularities" title="Permalink to this heading">#</a></h1>
+<a class="reference internal image-reference" href="../_images/refinement_mesh.png"><img alt="../_images/refinement_mesh.png" src="../_images/refinement_mesh.png" style="width: 100%;" /></a>
+<ul class="simple">
+<li><p>Geometric model has a round cylinder, no singularity</p></li>
+<li><p>Linear meshes have weak reentrant corners</p></li>
+<li><p>Moving to quadratic geometry elements is generally good enough</p></li>
+<li><p>Gmsh supports arbitrary order</p></li>
+</ul>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="why-matrix-free">
+<h1>Why matrix-free?<a class="headerlink" href="#why-matrix-free" title="Permalink to this heading">#</a></h1>
+<ul class="simple">
+<li><p>Assembled matrices need at least 4 bytes transferred per flop. Hardware does 10 flops per byte.</p></li>
+<li><p>Matrix-free methods store and move less data, compute faster.</p></li>
+</ul>
+<img alt="../_images/flop-per-byte-dp-2022.svg" class="floatleft" src="../_images/flop-per-byte-dp-2022.svg" /><img alt="../_images/TensorVsAssembly-qstore.svg" class="floatright" src="../_images/TensorVsAssembly-qstore.svg" /></section>
+<section class="tex2jax_ignore mathjax_ignore" id="matrix-free-is-faster-for-q-1-elements">
+<h1>Matrix-free is faster for <span class="math notranslate nohighlight">\(Q_1\)</span> elements<a class="headerlink" href="#matrix-free-is-faster-for-q-1-elements" title="Permalink to this heading">#</a></h1>
+<a class="reference internal image-reference" href="../_images/schwarz-apply.svg"><img alt="../_images/schwarz-apply.svg" src="../_images/schwarz-apply.svg" width="100%" /></a>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="p-multigrid-algorithm-and-cost-breakdown">
+<h1><span class="math notranslate nohighlight">\(p\)</span>-multigrid algorithm and cost breakdown<a class="headerlink" href="#p-multigrid-algorithm-and-cost-breakdown" title="Permalink to this heading">#</a></h1>
+<a class="reference internal image-reference" href="../_images/p-mg-cycle.png"><img alt="../_images/p-mg-cycle.png" src="../_images/p-mg-cycle.png" style="width: 80%;" /></a>
+<a class="reference internal image-reference" href="../_images/op_schematic.svg"><img alt="../_images/op_schematic.svg" src="../_images/op_schematic.svg" width="80%" /></a>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="nonlinear-solve-efficiency">
+<h1>Nonlinear solve efficiency<a class="headerlink" href="#nonlinear-solve-efficiency" title="Permalink to this heading">#</a></h1>
+<section id="q-2-elements">
+<h2><span class="math notranslate nohighlight">\(Q_2\)</span> elements<a class="headerlink" href="#q-2-elements" title="Permalink to this heading">#</a></h2>
+<img alt="../_images/schwarz-q2-t20-r2-l2-SNESSolve.svg" src="../_images/schwarz-q2-t20-r2-l2-SNESSolve.svg" /></section>
+<section id="q-3-elements">
+<h2><span class="math notranslate nohighlight">\(Q_3\)</span> elements<a class="headerlink" href="#q-3-elements" title="Permalink to this heading">#</a></h2>
+<img alt="../_images/schwarz-q3-t20-r2-l1-SNESSolve.svg" src="../_images/schwarz-q3-t20-r2-l1-SNESSolve.svg" /></section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="linear-solve-efficiency">
+<h1>Linear solve efficiency<a class="headerlink" href="#linear-solve-efficiency" title="Permalink to this heading">#</a></h1>
+<section id="id1">
+<h2><span class="math notranslate nohighlight">\(Q_2\)</span> elements<a class="headerlink" href="#id1" title="Permalink to this heading">#</a></h2>
+<img alt="../_images/schwarz-q2-t20-r2-l2-KSPSolve.svg" src="../_images/schwarz-q2-t20-r2-l2-KSPSolve.svg" /></section>
+<section id="id2">
+<h2><span class="math notranslate nohighlight">\(Q_3\)</span> elements<a class="headerlink" href="#id2" title="Permalink to this heading">#</a></h2>
+<img alt="../_images/schwarz-q3-t20-r2-l1-KSPSolve.svg" src="../_images/schwarz-q3-t20-r2-l1-KSPSolve.svg" /><ul class="simple">
+<li><p>Coarse solver is hypre BoomerAMG tuned configured for elasticity; thanks Victor Paludetto
+Magri.</p></li>
+</ul>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="preconditioner-setup-efficiency">
+<h1>Preconditioner setup efficiency<a class="headerlink" href="#preconditioner-setup-efficiency" title="Permalink to this heading">#</a></h1>
+<section id="id3">
+<h2><span class="math notranslate nohighlight">\(Q_2\)</span> elements<a class="headerlink" href="#id3" title="Permalink to this heading">#</a></h2>
+<img alt="../_images/schwarz-q2-t20-r2-l2-PCSetUp.svg" src="../_images/schwarz-q2-t20-r2-l2-PCSetUp.svg" /></section>
+<section id="id4">
+<h2><span class="math notranslate nohighlight">\(Q_3\)</span> elements<a class="headerlink" href="#id4" title="Permalink to this heading">#</a></h2>
+<img alt="../_images/schwarz-q3-t20-r2-l1-PCSetUp.svg" src="../_images/schwarz-q3-t20-r2-l1-PCSetUp.svg" /></section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="one-node-of-crusher-vs-historical-gordon-bell">
+<h1>One node of Crusher vs historical Gordon Bell<a class="headerlink" href="#one-node-of-crusher-vs-historical-gordon-bell" title="Permalink to this heading">#</a></h1>
+<section id="mdof-q-2-elements-nonlinear-analysis-in-seconds">
+<h2>184 MDoF <span class="math notranslate nohighlight">\(Q_2\)</span> elements nonlinear analysis in seconds<a class="headerlink" href="#mdof-q-2-elements-nonlinear-analysis-in-seconds" title="Permalink to this heading">#</a></h2>
+</section>
+<section id="gordon-bell-bhardwaj-et-al">
+<h2>2002 Gordon Bell (Bhardwaj et al)<a class="headerlink" href="#gordon-bell-bhardwaj-et-al" title="Permalink to this heading">#</a></h2>
+<a class="reference internal image-reference" href="../_images/gordon-bell-2002-mems.png"><img alt="../_images/gordon-bell-2002-mems.png" src="../_images/gordon-bell-2002-mems.png" style="width: 400%;" /></a>
+<a class="reference internal image-reference" href="../_images/gordon-bell-2002-mems-table.png"><img alt="../_images/gordon-bell-2002-mems-table.png" src="../_images/gordon-bell-2002-mems-table.png" style="width: 100%;" /></a>
+</section>
+<section id="gordon-bell-adams-et-al">
+<h2>2004 Gordon Bell (Adams et al)<a class="headerlink" href="#gordon-bell-adams-et-al" title="Permalink to this heading">#</a></h2>
+<a class="reference internal image-reference" href="../_images/gordon-bell-2004-bone.png"><img alt="../_images/gordon-bell-2004-bone.png" src="../_images/gordon-bell-2004-bone.png" style="width: 70%;" /></a>
+<a class="reference internal image-reference" href="../_images/gordon-bell-2004-bone-scaling.jpg"><img alt="../_images/gordon-bell-2004-bone-scaling.jpg" src="../_images/gordon-bell-2004-bone-scaling.jpg" style="width: 100%;" /></a>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="old-performance-model">
+<h1>Old performance model<a class="headerlink" href="#old-performance-model" title="Permalink to this heading">#</a></h1>
+<section id="iterative-solvers-bandwidth">
+<h2>Iterative solvers: Bandwidth<a class="headerlink" href="#iterative-solvers-bandwidth" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p>SpMV arithmetic intensity of 1/6 flop/byte</p></li>
+<li><p>Preconditioners also mostly bandwidth</p>
+<ul>
+<li><p>Architectural latency a big problem on GPUs, especially for sparse triangular solves.</p></li>
+<li><p>Sparse matrix-matrix products for AMG setup</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="direct-solvers-bandwidth-and-dense-compute">
+<h2>Direct solvers: Bandwidth and Dense compute<a class="headerlink" href="#direct-solvers-bandwidth-and-dense-compute" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Leaf work in sparse direct solves</p></li>
+<li><p>Dense factorization of supernodes</p>
+<ul>
+<li><p>Fundamentally nonscalable, granularity on GPUs is already too big to apply on subdomains</p></li>
+</ul>
+</li>
+<li><p>Research on H-matrix approximations (e.g., in STRUMPACK)</p></li>
+</ul>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="new-performance-model">
+<h1>New performance model<a class="headerlink" href="#new-performance-model" title="Permalink to this heading">#</a></h1>
+<section id="still-mostly-bandwidth">
+<h2>Still mostly bandwidth<a class="headerlink" href="#still-mostly-bandwidth" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Reduce storage needed at quadrature points</p>
+<ul>
+<li><p>Half the cost of a sparse matrix already for linear elements</p></li>
+<li><p>Big efficiency gains for high order</p></li>
+</ul>
+</li>
+<li><p>Assembled coarse levels are much smaller.</p></li>
+</ul>
+</section>
+<section id="compute">
+<h2>Compute<a class="headerlink" href="#compute" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Kernel fusion is necessary</p></li>
+<li><p>Balance vectorization with cache/occupancy</p></li>
+<li><p><span class="math notranslate nohighlight">\(O(n)\)</span>, but benefits from BLIS-like abstractions
+| BLIS | libCEED |
+|——|———|
+| packing | batched element restriction |
+| microkernel | basis action |
+| ? | user-provided qfunctions |</p></li>
+</ul>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="solids-efficient-matrix-free-jacobians">
+<h1>Solids: efficient matrix-free Jacobians<a class="headerlink" href="#solids-efficient-matrix-free-jacobians" title="Permalink to this heading">#</a></h1>
+<section id="cf-davydov-et-al-2020">
+<h2>cf. <a class="reference external" href="https://doi.org/10.1002/nme.6336">Davydov et al. (2020)</a><a class="headerlink" href="#cf-davydov-et-al-2020" title="Permalink to this heading">#</a></h2>
+<a class="reference internal image-reference" href="../_images/libceed-solids-initial-current.png"><img alt="../_images/libceed-solids-initial-current.png" src="../_images/libceed-solids-initial-current.png" style="width: 80%;" /></a>
+<a class="reference internal image-reference" href="../_images/libceed-solids-jacobian-table.png"><img alt="../_images/libceed-solids-jacobian-table.png" src="../_images/libceed-solids-jacobian-table.png" style="width: 80%;" /></a>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="stable-formulations-for-large-deformation-solid-mechanics">
+<h1>Stable formulations for large-deformation solid mechanics<a class="headerlink" href="#stable-formulations-for-large-deformation-solid-mechanics" title="Permalink to this heading">#</a></h1>
+<p>Solving for <span class="math notranslate nohighlight">\(\mathbf u(\mathbf X)\)</span>. Let <span class="math notranslate nohighlight">\(H = \frac{\partial \mathbf u}{\partial \mathbf X}\)</span> (displacement gradient) and <span class="math notranslate nohighlight">\(F = I + H\)</span> (deformation gradient).</p>
+<section id="textbook-approach">
+<h2>Textbook approach<a class="headerlink" href="#textbook-approach" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Stress as a function of <span class="math notranslate nohighlight">\(F\)</span>:
+<span class="math notranslate nohighlight">\(J = \operatorname{det} F\)</span>, <span class="math notranslate nohighlight">\(C = F^T F\)</span>
+<div class="math notranslate nohighlight">
+\[S = \lambda \log J\, C^{-1} + \mu (I - C^{-1})\]</div>
+</p></li>
+</ul>
+<p>Unstable for small strain, <span class="math notranslate nohighlight">\(F \approx I\)</span> and <span class="math notranslate nohighlight">\(J \approx 1\)</span>.</p>
+</section>
+<section id="stable-approach">
+<h2>Stable approach<a class="headerlink" href="#stable-approach" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Stable strain calculation
+<div class="math notranslate nohighlight">
+\[E = \underbrace{(C - I)/2}_{\text{unstable}} = (H + H^T + H^T H)/2\]</div>
+</p></li>
+<li><p>Compute <span class="math notranslate nohighlight">\(J_{-1} = J - 1\)</span> in a stable way</p></li>
+<li><p>Stress
+<div class="math notranslate nohighlight">
+\[S = \lambda \operatorname{\tt log1p}J_{-1}\, C^{-1} + 2 \mu C^{-1} E\]</div>
+</p></li>
+</ul>
+<a class="reference internal image-reference" href="../_images/stable-neo-hookean.svg"><img alt="../_images/stable-neo-hookean.svg" src="../_images/stable-neo-hookean.svg" width="100%" /></a>
+<p>This opens the door to dynamic mixed precision algorithms, with computationally intensive physics evaluated using single precision.</p>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="outlook-https-ratel-micromorph-org">
+<h1>Outlook: <a class="reference external" href="https://ratel.micromorph.org">https://ratel.micromorph.org</a><a class="headerlink" href="#outlook-https-ratel-micromorph-org" title="Permalink to this heading">#</a></h1>
+<ul class="simple">
+<li><p>You can move from <span class="math notranslate nohighlight">\(Q_1\)</span> to <span class="math notranslate nohighlight">\(Q_2\)</span> elements for about 2x cost (despite 8x more DoFs)</p></li>
+<li><p>Mesh to resolve geometry, <span class="math notranslate nohighlight">\(p\)</span>-refine to pragmatic accuracy</p></li>
+<li><p>libCEED isn’t just for high order; already 2x operator apply benefit for <span class="math notranslate nohighlight">\(Q_1\)</span></p></li>
+<li><p>Gordon Bell scale from 20 years ago <span class="math notranslate nohighlight">\(\mapsto\)</span> interactive on a workstation (if you can buy MI250X 😊)</p></li>
+<li><p><span class="math notranslate nohighlight">\(p\)</span>-multigrid, low-memory representation of matrix-free Jacobian</p></li>
+<li><p>Multi-node GPU on CUDA and ROCm</p></li>
+<li><p>Also good for implicit dynamics</p></li>
+</ul>
+<video src="../img/schwarz-pendulum.webm" autoplay loop controls width="100%" /><a class="reference internal image-reference" href="../_images/libceed-epoxy-traction-20210829.gif"><img alt="../_images/libceed-epoxy-traction-20210829.gif" src="../_images/libceed-epoxy-traction-20210829.gif" style="width: 80%;" /></a>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "cu-numpde/fall23",
+            ref: "main",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "julia-1.9"
+        },
+        kernelOptions: {
+            name: "julia-1.9",
+            path: "./slides"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'julia-1.9'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="2023-11-06-solids.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">2023-11-06 Solid Mechanics</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="2023-11-17-ratel-hands-on.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">2023-11-17 Ratel Hands-on</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">2023-11-13 Ratel for Solid Mechanics</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#last-time">Last time</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#today">Today</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#solid-mechanics-ratel-theory-guide">Solid mechanics: Ratel Theory Guide</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#material-coordinates">Material coordinates</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conservation">Conservation</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mass-by-definition-of-density">Mass by definition of density</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#momentum-by-equations-we-solve">Momentum by equations we solve</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#angular-momentum-by-symmetry-of-stress-and-strain-tensors">Angular momentum by symmetry of stress and strain tensors</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#momentum-balance-in-initial-configuration">Momentum balance in initial configuration</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#strain-measures">Strain measures</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#neo-hookean-model">Neo-Hookean model</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#nonlinear-solid-mechanics">Nonlinear solid mechanics</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#industrial-state-of-practice">Industrial state of practice</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#myths">Myths</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#industrial-models-are-riddled-with-singularities">Industrial models are riddled with singularities</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#the-mathematician-s-way-hp-adaptive-finite-elements">The mathematician’s way: <span class="math notranslate nohighlight">\(hp\)</span> adaptive finite elements</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#how-does-it-work">How does it work?</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#what-meshes-do-engineers-use">What meshes do engineers use?</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#approximation-constants-are-good-for-high-order">Approximation constants are good for high order</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#spurious-stress-singularities">Spurious stress singularities</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#why-matrix-free">Why matrix-free?</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#matrix-free-is-faster-for-q-1-elements">Matrix-free is faster for <span class="math notranslate nohighlight">\(Q_1\)</span> elements</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#p-multigrid-algorithm-and-cost-breakdown"><span class="math notranslate nohighlight">\(p\)</span>-multigrid algorithm and cost breakdown</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#nonlinear-solve-efficiency">Nonlinear solve efficiency</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#q-2-elements"><span class="math notranslate nohighlight">\(Q_2\)</span> elements</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#q-3-elements"><span class="math notranslate nohighlight">\(Q_3\)</span> elements</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#linear-solve-efficiency">Linear solve efficiency</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1"><span class="math notranslate nohighlight">\(Q_2\)</span> elements</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2"><span class="math notranslate nohighlight">\(Q_3\)</span> elements</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#preconditioner-setup-efficiency">Preconditioner setup efficiency</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id3"><span class="math notranslate nohighlight">\(Q_2\)</span> elements</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id4"><span class="math notranslate nohighlight">\(Q_3\)</span> elements</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#one-node-of-crusher-vs-historical-gordon-bell">One node of Crusher vs historical Gordon Bell</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mdof-q-2-elements-nonlinear-analysis-in-seconds">184 MDoF <span class="math notranslate nohighlight">\(Q_2\)</span> elements nonlinear analysis in seconds</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gordon-bell-bhardwaj-et-al">2002 Gordon Bell (Bhardwaj et al)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gordon-bell-adams-et-al">2004 Gordon Bell (Adams et al)</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#old-performance-model">Old performance model</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#iterative-solvers-bandwidth">Iterative solvers: Bandwidth</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#direct-solvers-bandwidth-and-dense-compute">Direct solvers: Bandwidth and Dense compute</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#new-performance-model">New performance model</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#still-mostly-bandwidth">Still mostly bandwidth</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compute">Compute</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#solids-efficient-matrix-free-jacobians">Solids: efficient matrix-free Jacobians</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cf-davydov-et-al-2020">cf. Davydov et al. (2020)</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#stable-formulations-for-large-deformation-solid-mechanics">Stable formulations for large-deformation solid mechanics</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#textbook-approach">Textbook approach</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stable-approach">Stable approach</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#outlook-https-ratel-micromorph-org">Outlook: https://ratel.micromorph.org</a></li>
+</ul>
+
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Jed Brown
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
