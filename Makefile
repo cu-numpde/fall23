@@ -1,5 +1,6 @@
 build:
 	. VENV/bin/activate && jupyter-book build .
+	sed -i 's|"img/|"../img/|g' _build/html/slides/*.html
 
 dev:
 	. VENV/bin/activate && jupyter-nbclassic --notebook-dir=. slides/

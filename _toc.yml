@@ -27,19 +27,18 @@ chapters:
   - file: slides/2023-10-09-factorization.ipynb
   - file: slides/2023-10-11-linear-solvers.ipynb
   - file: slides/2023-10-13-iterative.ipynb
-  - file: slides/2023-10-16-krylov.ipynb
-  - file: slides/2023-10-18-preconditioning.ipynb
-  - file: slides/2023-10-20-multigrid.ipynb
-  - file: slides/2023-10-23-amg.ipynb
-  - file: slides/2023-10-25-galerkin.ipynb
-  - file: slides/2023-10-30-fem.ipynb
+  - file: slides/2023-10-18-krylov.ipynb
+  - file: slides/2023-10-20-preconditioning.ipynb
+  - file: slides/2023-10-25-multigrid.ipynb
+  - file: slides/2023-10-27-amg.ipynb
+  - file: slides/2023-10-30-galerkin.ipynb
   - file: slides/2023-11-01-fem.ipynb
   - file: slides/2023-11-03-applied-fe.ipynb
   - file: slides/2023-11-06-solids.ipynb
-  - file: slides/2023-11-08-ratel.ipynb
-  - file: slides/2023-11-10-solvers.ipynb
-  - file: slides/2023-11-13-fe-compressible.ipynb
-  - file: slides/2023-11-15-ceed-fluids.ipynb
-  - file: slides/2023-11-17-finite-volume.ipynb
-  - file: slides/2023-11-27-reconstruction.ipynb
-  - file: slides/2023-11-29-systems.ipynb
+  - file: slides/2023-11-13-ratel.ipynb
+  - file: slides/2023-11-17-ratel-hands-on.ipynb
+  - file: slides/2023-11-27-fe-compressible.ipynb
+  - file: slides/2023-11-29-ceed-fluids.ipynb
+  - file: slides/2023-12-01-finite-volume.ipynb
+  - file: slides/2023-12-04-reconstruction.ipynb
+  - file: slides/2023-12-06-systems.ipynb
